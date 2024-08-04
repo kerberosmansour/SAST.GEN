@@ -14,7 +14,7 @@ def generate_semgrep_rule(vulnerability_info, context_file):
     
     try:
         # Use the extracted vulnerability info and context file to create a question
-        question = f"Read how to write semgrep SAST rules from the following context delimited by three backticks  ``` '{context_file}' ``` , generate a set of Semgrep SAST rules for the following vulnerability and its variations in the this information delimited by three backticks: ```{vulnerability_info}``` . Ensure that the rule covers variations to which this vulnerability could occur in popular frameworks for the mentioned language. The aim here is to write SAST rules with high false negative and low false postive rates."
+        question = f"Read about application security risks and issues as well as proactive security controls security developers can build three backticks  ``` '{context_file}' ``` , generate a set secure defaults and remediation code as well as secure library recommendations for the following vulnerability and its variations in the this information delimited by three backticks: ```{vulnerability_info}``` . Ensure that the detailed technical recomendations covers variations to which this vulnerability could occur in popular frameworks for the mentioned language. The aim here is to write secure defaults, that have a great developer experience and a high false negative and low false postive rates."
         
         # Define the file paths
         file_paths = [context_file]

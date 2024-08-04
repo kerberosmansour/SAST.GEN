@@ -39,10 +39,10 @@ def process_markdown_files(root_dir, output_dir):
 # Main function
 if __name__ == "__main__":
     # Define the root directory containing markdown files
-    root_directory = "/Users/sherif/Documents/GitHub/SVPS/SAST"
+    root_directory = "SAST"
     
     # Define the output directory to save extracted YAML files
-    output_directory = "/Users/sherif/Documents/GitHub/SVPS/SemgrepYAML"
+    output_directory = "SemgrepYAML"
     
     # Create the output directory if it doesn't exist
     os.makedirs(output_directory, exist_ok=True)

@@ -7,7 +7,7 @@ def generate_cwe_question(cwe_name, language):
 def main():
     file_summarizer = FileSummarizerAssistant()
     
-    languages = ["Kotlin"]
+    languages = ["TypeScript", "Python", "Go", "Ruby", "Rust", "PHP"]
     cwes = {
         "CWE-917": "Improper Neutralization of Special Elements used in an Expression Language Statement ('Expression Language Injection')",
         "CWE-502": "Deserialization of Untrusted Data",
@@ -38,8 +38,8 @@ def main():
                 
                 # Static file paths
                 file_paths = [
-                    "/Users/sherif/Documents/OWASPDocs/Vulns/combined_top10_markdown.md",
-                    "/Users/sherif/Documents/OWASPDocs/Vulns/combined_vuln_markdown.md"
+                    "KnowledgeBase/combined_top10_markdown.md",
+                    "KnowledgeBase/combined_vuln_markdown.md"
                 ]
                 
                 # Get the summary
