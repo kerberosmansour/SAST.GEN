@@ -5,7 +5,7 @@ from typing_extensions import override
 from typing import List, Optional
 
 # Load .env file
-load_dotenv('/Users/sherif/Documents/GitHub/Investigator/Testing/.env')
+load_dotenv('.env')
 
 # Now you can access the variables using os.getenv
 api_key = os.getenv("OPENAI_API_KEY")
@@ -138,7 +138,7 @@ class FileSummarizerAssistant:
             thread_id=thread_id,
             assistant_id=self.assistant.id,
             event_handler=event_handler,
-            instructions="Please address the user as Sherif Mansour. The user has a premium account.",
+            instructions="Please read leverage the knowledge base in the files attached, and answer the application security questions as detailed and as acurate as possible. The user is an application security engineers and they need an answer that has limited false positive and false negatives as possible.",
         ) as stream:
             stream.until_done()
 
