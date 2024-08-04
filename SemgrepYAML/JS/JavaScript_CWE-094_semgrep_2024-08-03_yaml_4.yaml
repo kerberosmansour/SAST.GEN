@@ -1,0 +1,10 @@
+rules:
+  - id: react-inline-event-handler
+    patterns:
+      - pattern: |
+          <div onClick={eval($CODE)} />
+      - pattern-not: |
+          <div onClick={safeFunction(eval($CODE))} />
+    message: "Possible code injection vulnerability in React inline event handler using eval detected."
+    languages: [javascript]
+    severity: ERROR

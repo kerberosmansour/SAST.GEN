@@ -1,0 +1,15 @@
+rules:
+  - id: csharp-aspnet-type-confusion
+    patterns:
+      - pattern-inside: |
+          public class $CLASS {
+            public void $METHOD(...) {
+              ...
+              $VAR1 = ($CASTTYPE)$VAR2;
+              ...
+            }
+          }
+      - pattern-not: $CASTTYPE == typeof($VAR2)
+    message: Potential type confusion detected in ASP.NET controller action where $VAR2 is cast to $CASTTYPE
+    languages: [csharp]
+    severity: ERROR

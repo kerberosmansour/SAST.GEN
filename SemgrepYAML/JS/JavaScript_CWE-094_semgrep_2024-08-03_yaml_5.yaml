@@ -1,0 +1,10 @@
+rules:
+  - id: taint-tracking-code-injection
+    mode: taint
+    pattern-sources:
+      - pattern: req.body.$DATA
+    pattern-sinks:
+      - pattern: eval($DATA)
+    message: "Data from request body is being evaluated directly, possible code injection."
+    languages: [javascript]
+    severity: ERROR

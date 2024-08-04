@@ -1,0 +1,11 @@
+rules:
+  - id: int-underflow-subtraction
+    languages: [csharp]
+    message: "Potential integer underflow in subtraction operation"
+    severity: ERROR
+    patterns:
+      - pattern: |
+          int $X = $Y - $Z
+      - metavariable-pattern:
+          metavariable: $Y
+          comparison: $Y - $Z > $Y

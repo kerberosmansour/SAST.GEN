@@ -1,0 +1,38 @@
+rules:
+  - id: improper-link-resolution-aspnet
+    patterns:
+      - pattern: |
+          if (System.IO.File.Exists($FILENAME)) { ... }
+      - pattern: |
+          $var = System.IO.File.ReadAll*($FILENAME)
+      - pattern-either:
+        - pattern: |
+            void $METHOD(...) {
+              ...
+              if (System.IO.File.Exists($FILENAME)) {
+                ...
+                $var = System.IO.File.ReadAll*($FILENAME)
+              }
+              ...
+            }
+        - pattern: |
+            public IActionResult $ACTION(...) {
+              ...
+              if (System.IO.File.Exists($FILENAME)) {
+                ...
+                $var = System.IO.File.ReadAll*($FILENAME)
+              }
+              ...
+            }
+        - pattern: |
+            public async Task<IActionResult> $ACTION(...) {
+              ...
+              if (System.IO.File.Exists($FILENAME)) {
+                ...
+                $var = System.IO.File.ReadAll*($FILENAME)
+              }
+              ...
+            }
+    message: Improper Link Resolution Before File Access Detected for $FILENAME. Ensure that the symbolic link is securely resolved.
+    languages: [csharp]
+    severity: WARNING

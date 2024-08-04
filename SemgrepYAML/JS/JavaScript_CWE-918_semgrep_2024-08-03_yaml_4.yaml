@@ -1,0 +1,16 @@
+rules:
+  - id: ssrf-fetch-request
+    patterns:
+      - pattern: |
+          fetch($URL, ...)
+      - pattern-not: |
+          const safeURLPattern = ...
+          if(safeURLPattern.test($URL)) {
+            fetch($URL, ...)
+          }
+    message: |
+      Possible Server-Side Request Forgery (SSRF) via 'fetch'
+    severity: ERROR
+    languages: [javascript]
+    metadata:
+      cwe: 918

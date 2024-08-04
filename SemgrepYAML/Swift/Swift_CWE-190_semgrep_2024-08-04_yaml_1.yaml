@@ -1,0 +1,83 @@
+rules:
+  - id: swift-integer-overflow
+    languages: [swift]
+    message: "Possible Integer Overflow or Wraparound detected. Ensure bounds checking is performed."
+    severity: WARNING
+    patterns:
+      - pattern: |
+          ... = $X + $Y
+      - metavariable-pattern:
+          metavariable: $X
+          patterns:
+            - pattern: $A.max
+            - pattern: UInt8.max
+            - pattern: UInt16.max
+            - pattern: UInt32.max
+            - pattern: UInt64.max
+            - pattern: Int8.max
+            - pattern: Int16.max
+            - pattern: Int32.max
+            - pattern: Int64.max
+      - pattern-not-inside:
+          - pattern: if $CONDITION {
+                         $CHECK
+                     }
+  - id: swift-integer-wraparound-multiplication
+    languages: [swift]
+    message: "Possible Integer Wraparound in multiplication detected. Ensure proper bounds checking."
+    severity: WARNING
+    patterns:
+      - pattern: |
+          ... = $X * $Y
+      - metavariable-pattern:
+          metavariable: $X
+          patterns:
+            - pattern: $A.max
+            - pattern: UInt8.max
+            - pattern: UInt16.max
+            - pattern: UInt32.max
+            - pattern: UInt64.max
+            - pattern: Int8.max
+            - pattern: Int16.max
+            - pattern: Int32.max
+            - pattern: Int64.max
+      - pattern-not-inside:
+          - pattern: if $CONDITION {
+                         $CHECK
+                     }
+  - id: swift-integer-overflow-subtraction
+    languages: [swift]
+    message: "Possible Integer Overflow or Wraparound in subtraction detected. Ensure bounds checking."
+    severity: WARNING
+    patterns:
+      - pattern: |
+          ... = $X - $Y
+      - metavariable-pattern:
+          metavariable: $X
+          patterns:
+            - pattern: $A.min
+            - pattern: UInt8.min
+            - pattern: UInt16.min
+            - pattern: UInt32.min
+            - pattern: UInt64.min
+            - pattern: Int8.min
+            - pattern: Int16.min
+            - pattern: Int32.min
+            - pattern: Int64.min
+      - pattern-not-inside:
+          - pattern: if $CONDITION {
+                         $CHECK
+                     }
+  - id: swift-integer-overflow-division
+    languages: [swift]
+    message: "Possible Integer Overflow or Wraparound in division detected. Ensure bounds checking."
+    severity: WARNING
+    patterns:
+      - pattern: |
+          ... = $X / $Y
+      - metavariable-pattern:
+          metavariable: $X
+          patterns:
+            - pattern: 0
+          patterns-not:
+            - pattern: if $Y != 0

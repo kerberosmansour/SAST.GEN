@@ -1,0 +1,30 @@
+rules:
+  - id: deserialization-of-untrusted-data
+    patterns:
+      - pattern: |
+          var $VAR = JSON.parse($DATA);
+      - pattern: |
+          const $VAR = JSON.parse($DATA);
+      - pattern: |
+          let $VAR = JSON.parse($DATA);
+      - pattern: |
+          var $VAR = eval($DATA);
+      - pattern: |
+          const $VAR = eval($DATA);
+      - pattern: |
+          let $VAR = eval($DATA);
+      - pattern: |
+          var $VAR = deserialize($DATA);
+      - pattern: |
+          const $VAR = deserialize($DATA);
+      - pattern: |
+          let $VAR = deserialize($DATA);
+    message: Avoid deserialization of untrusted data to prevent RCE (CWE-502)
+    languages: [javascript]
+    severity: ERROR
+    metadata:
+      cwe: "CWE-502"
+      confidence: High
+      likelihood: High
+      impact: High
+      subcategory: vuln

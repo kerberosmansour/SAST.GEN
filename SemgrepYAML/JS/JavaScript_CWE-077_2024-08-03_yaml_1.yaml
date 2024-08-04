@@ -1,0 +1,58 @@
+rules:
+  - id: js-command-injection
+    patterns:
+      - pattern-either:
+          - pattern: exec($CMD)
+          - pattern: execSync($CMD)
+          - pattern: spawn($CMD, $ARGS, ...)
+          - pattern: spawnSync($CMD, $ARGS, ...)
+          - pattern: system($CMD)
+          - pattern: `$LIB.execFile($CMD, ...`
+      - pattern-not-inside: |
+          function safeFunction(...)
+          {
+            try {
+              $CMD = ...; 
+              if ($CMD.startsWith("safeCommand")) {
+                return $CMD;
+              }
+            } catch (err) {
+              // handle error
+            }
+          }
+    message: Potential Command Injection detected with '$CMD'
+    languages:
+      - javascript
+    severity: ERROR
+    metadata:
+      cwe: "CWE-077"
+      confidence: "high"
+      likelihood: "high"
+      impact: "high"
+      subcategory: "vuln"
+    examples:
+      - code: |
+          const { exec, execSync } = require('child_process');
+          exec(userInput); // ruleid: js-command-injection
+          execSync(userInput); // ruleid: js-command-injection
+
+          const { spawn, spawnSync } = require('child_process');
+          spawn(userInput, ['arg1']); // ruleid: js-command-injection
+          spawnSync(userInput, ['arg1']); // ruleid: js-command-injection
+
+          const system = require('system');
+          system(userInput); // ruleid: js-command-injection
+
+          someLib.execFile(userInput); // ruleid: js-command-injection
+      - code: |
+          // ok: js-command-injection
+          function safeFunction(cmd) {
+            try {
+              if (cmd.startsWith("safeCommand")) {
+                require('child_process').exec(cmd);
+              }
+            } catch (err) {
+              // handle error
+            }
+          }
+          safeFunction(userInput);

@@ -1,0 +1,15 @@
+rules:
+  - id: aspnet-large-file-upload
+    languages: [csharp]
+    message: Ensure large file uploads are properly controlled.
+    pattern: |
+      [HttpPost]
+      public IActionResult UploadFile(IFormFile $FILE) {
+        ...
+      }
+    pattern-inside: |
+      [Authorize]
+      private class Controller { ... }
+    severity: WARNING
+    metadata:
+      cwe: "CWE-400"

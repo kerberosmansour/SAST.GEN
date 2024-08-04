@@ -1,0 +1,15 @@
+rules:
+  - id: csharp-xmlserializer-deserialization
+    languages: [csharp]
+    message: "Deserialization using XmlSerializer of potentially untrusted data (CWE-502)"
+    severity: ERROR
+    patterns:
+      - pattern: |
+          var $DESERIALIZER = new XmlSerializer();
+          $DESERIALIZER.Deserialize($STREAM);
+      - pattern: |
+          XmlSerializer $DESERIALIZER = new XmlSerializer();
+          $DESERIALIZER.Deserialize($STREAM);
+    metadata:
+      impact: "high"
+      confidence: "high"

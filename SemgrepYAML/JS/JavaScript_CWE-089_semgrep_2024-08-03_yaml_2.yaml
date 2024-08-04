@@ -1,0 +1,13 @@
+rules:
+  - id: js-sqlinjection-concat
+    patterns:
+      - pattern: |
+          connection.query("SELECT ... FROM ... WHERE ... " + $USER_INPUT, ...)
+      - pattern: |
+          client.query("SELECT ... FROM ... WHERE ... " + $USER_INPUT, ...)
+    languages: [javascript]
+    message: "Possible SQL Injection via string concatenation."
+    severity: ERROR
+    metadata:
+      cwe: CWE-089
+      owasp: A1:2017-Injection

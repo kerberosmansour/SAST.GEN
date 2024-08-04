@@ -1,0 +1,12 @@
+rules:
+  - id: swift-xml-external-entity
+    patterns:
+      - pattern: |
+          let $VAR = XMLParser(contentsOf: URL(string: $URL)!)
+      - pattern: |
+          let $VAR = XMLParser(data: $DATA)
+    message: "XML Parser is used with external entity references enabled, which might lead to CWE-611"
+    languages: [swift]
+    severity: ERROR
+    metadata:
+      cwe: CWE-611

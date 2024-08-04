@@ -1,0 +1,17 @@
+rules:
+  - id: csharp-deserialization-untrusted-data
+    languages: [csharp]
+    message: "Potential deserialization of untrusted data (CWE-502)"
+    severity: ERROR
+    patterns:
+      - pattern-either:
+        - pattern: |
+            $DESERIALIZER.Deserialize($STREAM)
+        - pattern: |
+            $DESERIALIZER.Deserialize($BYTES)
+    metadata:
+      impact: "high"
+      confidence: "high"
+      references: 
+        - "https://cwe.mitre.org/data/definitions/502.html"
+        - "https://docs.microsoft.com/en-us/dotnet/api/system.runtime.serialization.formatters.binary.binaryformatter?view=netframework-4.8"

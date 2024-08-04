@@ -1,0 +1,15 @@
+rules:
+  - id: aspnetcore-http-post-missing-anti-forgery-token
+    languages: [csharp]
+    message: "HttpPost action without anti-forgery token validation can lead to CSRF vulnerabilities."
+    patterns:
+      - pattern-inside: |
+          public class $CONTROLLER : Controller
+      - pattern: |
+          [HttpPost]
+          public IActionResult $ACTION(...){...}
+      - pattern-not: |
+          [ValidateAntiForgeryToken]
+          [HttpPost]
+          public IActionResult $ACTION(...){...}
+    severity: ERROR

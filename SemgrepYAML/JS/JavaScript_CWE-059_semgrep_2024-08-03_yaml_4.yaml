@@ -1,0 +1,5 @@
+- pattern: |
+        http.createServer((req, res) => {
+          let filePath = url.parse(req.url).pathname;
+          fs.readFileSync(filePath, ...);
+        });

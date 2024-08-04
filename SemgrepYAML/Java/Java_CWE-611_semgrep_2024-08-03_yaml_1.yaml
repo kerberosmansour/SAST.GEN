@@ -1,0 +1,30 @@
+rules:
+  - id: java-xxe-cwe-611
+    languages:
+      - java
+    message: "Improper Restriction of XML External Entity Reference (XXE) in Java"
+    severity: ERROR
+    patterns:
+      - pattern-either:
+          # Detecting XXE in JAXP
+          - pattern: |
+              DocumentBuilderFactory $DBF = DocumentBuilderFactory.newInstance();
+              $DBF.setFeature("http://javax.xml.XMLConstants/feature/secure-processing", false);
+          - pattern: |
+              DocumentBuilderFactory $DBF = DocumentBuilderFactory.newInstance();
+              $DBF.setFeature("http://apache.org/xml/features/disallow-doctype-decl", false);
+          - pattern: |
+              SAXParserFactory $SPF = SAXParserFactory.newInstance();
+              $SPF.setFeature("http://javax.xml.XMLConstants/feature/secure-processing", false);
+          - pattern: |
+              SAXParserFactory $SPF = SAXParserFactory.newInstance();
+              $SPF.setFeature("http://apache.org/xml/features/disallow-doctype-decl", false);
+          # Detecting vulnerable usage in DOM or SAX Parsing without proper features
+          - pattern-not: |
+              $DBF.setFeature("http://javax.xml.XMLConstants/feature/secure-processing", true);
+          - pattern-not: |
+              $SPF.setFeature("http://javax.xml.XMLConstants/feature/secure-processing", true);
+    metadata:
+      cwe: "CWE-611"
+      references:
+        - "https://cwe.mitre.org/data/definitions/611.html"

@@ -1,0 +1,18 @@
+rules:
+  - id: javascript-eval-injection
+    languages: [javascript]
+    message: "Detected potential Expression Language Injection via eval."
+    severity: ERROR
+    patterns:
+      - pattern: |
+          eval($EXPR)
+      - metavariable-pattern:
+          metavariable: $EXPR
+          patterns:
+            - pattern-inside: |
+                $OBJ.$PROP
+            - pattern-inside: |
+                $OBJ[$PROP]
+    metadata:
+      cwe: "CWE-917"
+      owasp: "A1: Injection"

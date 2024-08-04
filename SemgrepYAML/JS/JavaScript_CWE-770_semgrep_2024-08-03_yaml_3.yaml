@@ -1,0 +1,23 @@
+rules:
+  - id: excessive-resource-creation
+    languages: [javascript]
+    message: "Excessive resource creation in a single block can lead to resource exhaustion."
+    severity: WARNING
+    pattern-either:
+      - pattern: |
+          for (...) {
+            ...
+            $RESOURCE1 = new $RESOURCE_TYPE1(...);
+            $RESOURCE2 = new $RESOURCE_TYPE2(...);
+            ...
+          }
+      - pattern: |
+          while (...) {
+            ...
+            $RESOURCE1 = new $RESOURCE_TYPE1(...);
+            $RESOURCE2 = new $RESOURCE_TYPE2(...);
+            ...
+          }
+    metadata:
+      cwe: "CWE-770"
+      owasp: "A6: Security Misconfiguration"

@@ -1,0 +1,8 @@
+rules:
+  - id: csharp-cleartext-websocket-connection
+    patterns:
+      - pattern: $W = new WebSocket("ws://$URL", ...)
+      - pattern-not: $W = new WebSocket("wss://$URL", ...)
+    message: "Found potentially insecure WebSocket connection without TLS."
+    severity: WARNING
+    languages: [csharp]

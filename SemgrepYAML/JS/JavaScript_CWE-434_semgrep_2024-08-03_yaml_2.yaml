@@ -1,0 +1,26 @@
+rules:
+  - id: express-unrestricted-file-upload
+    languages: [javascript]
+    message: "Unrestricted File Upload (CWE-434) in Express.js"
+    severity: ERROR
+    pattern: |
+      app.post('/upload', (req, res) => {
+        const $VAR = req.files.$FILE;
+        ...
+        $VAR.mv(...);
+      });
+    metadata:
+      cwe: "CWE-434"
+    examples:
+      - code: |
+          app.post('/upload', (req, res) => {
+            const file = req.files.uploadedFile;
+            file.mv(`/uploads/${file.name}`);
+          });
+        not-apply: true
+      - code: |
+          app.post('/upload', (req, res) => {
+            const secureFile = req.files.secureUpload;
+            secureFile.mv(`/uploads/${secureFile.name}`);
+          });
+        apply: true

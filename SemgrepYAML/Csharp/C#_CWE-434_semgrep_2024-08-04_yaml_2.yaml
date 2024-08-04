@@ -1,0 +1,11 @@
+rules:
+  - id: csharp-insufficient-file-type-validation
+    patterns:
+      - pattern-either:
+          - pattern: |
+              if ($FILE.ContentType == ...)
+          - pattern: |
+              if ($FILE.FileName.EndsWith("..."))
+    message: Detected insufficient file type validation in file upload.
+    languages: [csharp]
+    severity: WARNING

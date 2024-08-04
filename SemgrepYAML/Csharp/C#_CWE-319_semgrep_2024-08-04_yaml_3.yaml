@@ -1,0 +1,8 @@
+rules:
+  - id: csharp-cleartext-data-transfer-direct-strings
+    patterns:
+      - pattern: $V = "http://$URL"
+      - pattern-not: $V = "https://$URL"
+    message: "Found potentially insecure direct string assignment using HTTP."
+    severity: WARNING
+    languages: [csharp]

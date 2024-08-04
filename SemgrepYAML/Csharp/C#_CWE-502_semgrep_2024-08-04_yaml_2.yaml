@@ -1,0 +1,15 @@
+rules:
+  - id: csharp-binaryformatter-deserialization
+    languages: [csharp]
+    message: "Deserialization using BinaryFormatter of potentially untrusted data (CWE-502)"
+    severity: ERROR
+    patterns:
+      - pattern: |
+          var $DESERIALIZER = new BinaryFormatter();
+          $DESERIALIZER.Deserialize($STREAM);
+      - pattern: |
+          BinaryFormatter $DESERIALIZER = new BinaryFormatter();
+          $DESERIALIZER.Deserialize($STREAM);
+    metadata:
+      impact: "high"
+      confidence: "high"

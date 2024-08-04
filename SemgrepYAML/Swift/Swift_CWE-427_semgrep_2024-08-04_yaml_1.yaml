@@ -1,0 +1,21 @@
+rules:
+  - id: uncontrolled-search-path-element-swift
+    languages: [swift]
+    message: "Potential uncontrolled search path element detected"
+    severity: WARNING
+    patterns:
+      - pattern: |
+          let envPaths = ProcessInfo.processInfo.environment["$KEY"]
+      - pattern-either:
+          - pattern: |
+              let paths = ProcessInfo.processInfo.environment["$KEY"]?.components(separatedBy: ":")
+          - pattern: |
+              let path = ProcessInfo.processInfo.environment["$KEY"]
+            
+metavariable-regex:
+  $KEY: '^PATH$|^DYLD_LIBRARY_PATH$|^DYLD_FRAMEWORK_PATH$'
+
+metadata:
+  cwe: "CWE-427"
+  owasp: "A9:2021-Insecure Design"
+  source: "https://example.com/cwe-427"

@@ -1,0 +1,26 @@
+rules:
+  - id: swift-xss-webview
+    languages: [swift]
+    message: "Potential XSS vulnerability: Usage of UIWebView or WKWebView without proper input sanitization"
+    severity: ERROR
+    patterns:
+      - pattern-either:
+          - pattern: |
+              let $WEBVIEW = ... as? UIWebView
+              ...
+              $WEBVIEW.loadHTMLString($HTML, baseURL: ...)
+          - pattern: |
+              let $WEBVIEW = ... as? WKWebView
+              ...
+              $WEBVIEW.loadHTMLString($HTML, baseURL: ...)
+    metadata:
+      cwe: CWE-079
+      owasp: A7
+    severity: WARNING
+    patterns:
+      - pattern-either:
+        - pattern: |
+             [$WEBVIEW loadHTMLString:$HTML baseURL:$BASEURL];
+        - pattern: |
+             let $WEBVIEW = WKWebView()
+             webView.loadHTMLString($HTML, baseURL: $BASEURL)

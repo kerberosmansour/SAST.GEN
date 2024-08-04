@@ -1,0 +1,10 @@
+rules:
+  - id: cleartext-urlsession-datatask
+    languages: [swift]
+    message: "Sensitive data transmitted over HTTP via URLSession"
+    severity: ERROR
+    patterns:
+      - pattern: URLSession.shared.dataTask(with: URL(string: "$URL")!)
+      - metavariable-comparison:
+          metavariable: $URL
+          comparison: $URL.startswith("http:")

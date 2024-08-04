@@ -1,0 +1,17 @@
+rules:
+- id: swift-path-traversal-kitura
+  languages: [swift]
+  message: |
+    Potential path traversal vulnerability in a Kitura route. Validate and sanitize incoming 'file' parameter.
+  severity: ERROR
+  patterns:
+    - pattern: |
+        router.get("/download/:file") { request, response, next in
+            let file = request.parameters["file"] ?? ""
+            ...
+            next()
+    - pattern: |
+        router.post("/upload/:file") { request, response, next in
+            let file = request.parameters["file"] ?? ""
+            ...
+            next()

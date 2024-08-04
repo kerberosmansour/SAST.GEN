@@ -1,0 +1,31 @@
+rules:
+  - id: cwe-917-expression-language-injection
+    languages: [swift]
+    message: "Potential Expression Language Injection detected"
+    severity: ERROR
+    patterns:
+      - pattern: |
+          @$INJECTION_ANNOTATION(...)
+          func $FUNC(...) {
+            # Potentially unsafe code here
+            ...
+          }
+      - pattern: |
+          $CLASS @INJECTION_ANNOTATION
+          ...
+          $CLASS_FUNC(...)
+          ...
+      - pattern: |
+          let $VAR = $DATA_SOURCE
+          ...
+          evaluate(expression: $VAR)
+    pattern-either:
+      - pattern: |
+          @UIApplicationMain
+      - pattern: |
+          @IBDesignable
+      - pattern: |
+          @IBAction
+    metadata:
+      cwe: "CWE-917"
+      owasp: "A10:2017 - Insufficient Logging and Monitoring"

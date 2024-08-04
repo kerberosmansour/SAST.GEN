@@ -1,0 +1,5 @@
+- pattern: |
+        app.get('/retrieve', (req, res) => {
+          let filePath = req.query.path;
+          fs.readFileSync(filePath, ...);
+        });

@@ -1,0 +1,29 @@
+rules:
+  - id: java-sql-injection
+    languages:
+      - java
+    message: "Potential SQL Injection vulnerability"
+    severity: ERROR
+    patterns:
+      - pattern-either:
+          # Detect concatenation of user input in SQL queries.
+          - pattern: |
+              String $QUERY = "..." + $INPUT + "...";
+          - pattern: |
+              String $QUERY = "SELECT ... FROM ... WHERE ..." + $INPUT + "...";
+      - pattern-either:
+          # Detect unsafe usage of PreparedStatement.
+          - pattern: |
+              $STMT = $CONN.createStatement();
+              $RS = $STMT.executeQuery("SELECT ... FROM ... WHERE ..." + $INPUT + "...");
+
+          - pattern: |
+              $STMT = $CONN.createStatement();
+              $RS = $STMT.executeQuery("..." + $INPUT + "...");
+      - pattern-not:
+          # Exclude safe practices with parameterized queries.
+          - pattern: |
+              $STMT.setString(..., ...);
+
+          - pattern: |
+              $PS.setInt(..., ...);

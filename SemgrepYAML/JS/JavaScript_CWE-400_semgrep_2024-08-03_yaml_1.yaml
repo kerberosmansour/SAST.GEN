@@ -1,0 +1,82 @@
+rules:
+  - id: detect-recursive-calls
+    languages: [javascript, typescript]
+    message: "Potential uncontrolled resource consumption due to recursive calls"
+    severity: ERROR
+    patterns:
+      - pattern: |
+          function $FUNC(...) {
+            ...
+            $FUNC(...)
+            ...
+          }
+      - pattern-not: |
+          function $FUNC(...) {
+            if (...) {
+              return ...;
+            }
+            $FUNC(...)
+          }
+
+  - id: detect-infinite-loops
+    languages: [javascript, typescript]
+    message: "Potential infinite loop causing uncontrolled resource consumption"
+    severity: ERROR
+    patterns:
+      - pattern: |
+          while (true) {
+            ...
+          }
+      - pattern: |
+          for (;;) {
+            ...
+          }
+
+  - id: detect-uncontrolled-iterations
+    languages: [javascript, typescript]
+    message: "Uncontrolled resource consumption due to excessive iterations"
+    severity: ERROR
+    patterns:
+      - pattern: |
+          for (let $VAR = 0; $VAR < $EXPR; $VAR++) {
+            ...
+          }
+      - metavariable-comparison:
+          metavariable: $EXPR
+          comparison: $EXPR > 10000
+
+  - id: detect-no-rate-limit-axios
+    languages: [javascript, typescript]
+    message: "Uncontrolled resource consumption due to missing rate limiting with axios"
+    severity: ERROR
+    patterns:
+      - pattern: |
+          axios.get($URL).then($RESPONSE => {
+            ...
+            axios.get($URL)
+            ...
+          })
+
+  - id: detect-no-throttle-debounce
+    languages: [javascript, typescript]
+    message: "Potential uncontrolled resource consumption due to missing throttle/debounce"
+    severity: WARNING
+    patterns:
+      - pattern: |
+          $OBJ.$METHOD = function(...) {
+            ...
+            window.addEventListener($EVENT, $FUNC)
+            ...
+          }
+      - pattern-not: |
+          $OBJ.$METHOD = function(...) {
+            ...
+            window.addEventListener($EVENT, _.throttle($FUNC, ...))
+            ...
+          }
+      - pattern-not: |
+          $OBJ.$METHOD = function(...) {
+            ...
+            window.addEventListener($EVENT, _.debounce($FUNC, ...))
+            ...
+          }

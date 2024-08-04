@@ -1,0 +1,39 @@
+rules:
+  - id: improper-certificate-validation-axios
+    patterns:
+      - pattern: |
+          axios.get(..., { httpsAgent: new https.Agent({ rejectUnauthorized: false })})
+      - pattern: |
+          axios.post(..., { httpsAgent: new https.Agent({ rejectUnauthorized: false })})
+      - pattern: |
+          axios.request({ httpsAgent: new https.Agent({ rejectUnauthorized: false }), ...})
+    message: "HTTPS request made without proper certificate validation using axios"
+    languages: [javascript]
+    severity: ERROR
+
+  - id: improper-certificate-validation-request
+    patterns:
+      - pattern: |
+          request(...) // Inside options object:
+            { rejectUnauthorized: false, ... }
+    message: "HTTPS request made without proper certificate validation using the request library"
+    languages: [javascript]
+    severity: ERROR
+
+  - id: improper-certificate-validation-fetch
+    patterns:
+      - pattern: |
+          fetch(..., { agent: new https.Agent({ rejectUnauthorized: false })})
+    message: "HTTPS request made without proper certificate validation using fetch"
+    languages: [javascript]
+    severity: ERROR
+
+  - id: improper-certificate-validation-node-https
+    patterns:
+      - pattern: |
+          https.get(..., { rejectUnauthorized: false })
+      - pattern: |
+          https.request(..., { rejectUnauthorized: false })
+    message: "HTTPS request made without proper certificate validation using Node.js https module"
+    languages: [javascript]
+    severity: ERROR

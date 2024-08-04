@@ -1,0 +1,15 @@
+rules:
+  - id: ssrf-custom-urlsession
+    languages: [swift]
+    message: "Potential SSRF via custom URLSession"
+    severity: ERROR
+    patterns:
+      - pattern: |
+          let session = URLSession(configuration: ...)
+          session.dataTask(with: URL(string: $URL)!)
+      - pattern-scope: $URL
+        patterns:
+          - pattern-not: "fixedURL"
+    metadata:
+      cwe: "CWE-918"
+      owasp: "A10:2019"

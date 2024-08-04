@@ -1,0 +1,11 @@
+rules:
+  - id: csharp-dangerous-file-type-detected
+    patterns:
+      - pattern: |
+          if ($FILE.FileName.EndsWith(".exe") || $FILE.FileName.EndsWith(".js") || ...)
+      - pattern-either:
+          - pattern: |
+              if (!FileCheck($FILE.FileName))
+    message: Detected upload of potentially dangerous file types. Ensure proper validation.
+    languages: [csharp]
+    severity: WARNING

@@ -1,0 +1,11 @@
+rules:
+  - id: sslstream-authenticateasclient
+    languages:
+      - csharp
+    message: Insecure SslStream.AuthenticateAsClient settings
+    severity: ERROR
+    patterns:
+      - pattern: |
+          var $sslStream = new SslStream($stream, false, (sender, certificate, chain, sslPolicyErrors) => true);
+      - pattern: |
+          $sslStream.AuthenticateAsClient($targetHost, $clientCertificates, $enabledSslProtocols, false);

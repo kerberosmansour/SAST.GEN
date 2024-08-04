@@ -1,0 +1,8 @@
+rules:
+  - id: js-json-parse-deserialization
+    languages: [javascript]
+    message: "Deserialization of untrusted data using JSON.parse can lead to security vulnerabilities."
+    severity: WARNING
+    patterns:
+      - pattern: |
+          JSON.parse($UNTRUSTED_INPUT)

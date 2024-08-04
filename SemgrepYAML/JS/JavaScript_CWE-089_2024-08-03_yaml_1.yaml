@@ -1,0 +1,48 @@
+rules:
+- id: sql-injection-js
+  languages: [javascript]
+  message: "Potential SQL Injection vulnerability detected"
+  severity: ERROR
+  mode: taint
+  pattern-sources:
+    - pattern: |
+        function $FUNC(...) {
+          ...
+          req.body.$SOURCE = ...
+          ...
+        }
+    - pattern: |
+        router.$METHOD(..., (req, res) => {
+          ...
+          req.body.$SOURCE = ...
+          ...
+        })
+  pattern-sinks:
+    - pattern: |
+        $QUERY.query(`... $SOURCE ...`)
+    - pattern: |
+        connection.execute(`... $SOURCE ...`)
+  pattern-propagators:
+    - pattern: |
+        function $FUNC(...) {
+          ...
+          var $PROPAGATOR = $SOURCE;
+          ...
+        }
+    - pattern: |
+        router.$METHOD(..., (req, res) => {
+          ...
+          var $PROPAGATOR = req.body.$SOURCE;
+          ...
+        })
+  pattern-sanitizers:
+    - pattern: |
+        sanitizer.escape($SOURCE)
+    - pattern: |
+        req.sanitize($SOURCE)
+  metadata:
+    cwe: "CWE-089"
+    confidence: high
+    impact: high
+    likelihood: high
+    subcategory: vuln

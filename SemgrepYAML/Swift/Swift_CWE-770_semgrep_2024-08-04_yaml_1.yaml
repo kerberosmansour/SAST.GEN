@@ -1,0 +1,18 @@
+rules:
+  - id: allocation-of-resources-without-limits-or-throttling
+    languages: [swift]
+    message: Allocation of resources without limits or throttling detected
+    severity: WARNING
+    patterns:
+      - pattern: |
+          let $RESOURCE = $FUNCTION($ARGS)
+      - metavariable-pattern:
+          metavariable: $FUNCTION
+          patterns:
+            - pattern: DispatchQueue.global
+            - pattern: DispatchQueue.concurrentPerform
+            - pattern: myFunction // Replace with a function that might be resource-intensive
+      - metavariable-comparison:
+          metavariable: $ARGS
+          comparison: int($ARGS) > 1000 # Adjust the threshold value as needed considering typical safe limits
+      - pattern-not: let throttledResource = $FUNCTION($ARGS)

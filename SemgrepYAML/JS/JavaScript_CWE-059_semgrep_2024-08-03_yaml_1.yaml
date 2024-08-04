@@ -1,0 +1,22 @@
+rules:
+  - id: improper-link-resolution-before-file-access
+    patterns:
+      - pattern-either:
+          # Basic filesystem access example
+          - pattern: |
+              fs.readFileSync($PATH, ...)
+          # Express.js file access vulnerability
+          - pattern: |
+              app.get('/retrieve', (req, res) => {
+                let filePath = req.query.path;
+                fs.readFileSync(filePath, ...);
+              });
+          # HTTP file serving
+          - pattern: |
+              http.createServer((req, res) => {
+                let filePath = url.parse(req.url).pathname;
+                fs.readFileSync(filePath, ...)
+              });
+    severity: ERROR
+    message: "Improper Link Resolution Before File Access leading to potential link following vulnerability (CWE-059)"
+    languages: [javascript]

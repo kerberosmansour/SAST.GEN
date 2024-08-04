@@ -1,0 +1,41 @@
+rules:
+  - id: swift-os-command-injection
+    languages: [swift]
+    message: "Possible OS Command Injection detected"
+    severity: ERROR
+    patterns:
+      # Check for use of five common command execution methods
+      - pattern-either:
+        - pattern: ProcessInfo.processInfo.environment[$VAR]!
+        - pattern: Process(...).launch()
+        - pattern: Process(...).run()
+        - pattern: sh(...)
+
+      # Check for concatenation of dynamic user inputs within command strings
+      - pattern: $CMD = "... " + $INJECT + " ..."
+      - pattern-either:
+        - metavariable-pattern:
+            metavariable: $COMMAND
+            patterns:
+              - pattern: ... = $CMD
+              - pattern-not: "sh -c $INJECT"
+
+    # Example of deeper analysis with `metavariable-comparison` (match dynamic injection)
+    - pattern: Process($INPUT)
+    - metavariable-pattern:
+        metavariable: $INPUT
+        patterns:
+          - pattern-inside: "... = $DANGEROUS_PARAM"
+          # Sanitize safe methods (avoid)
+          - pattern-not-inside: |
+              let safePaths = getSafePaths()
+              if safePaths.contains($DANGEROUS_PARAM) { ... }
+          - pattern-not-inside: |
+              let safeParams = getSafeParams()
+              if safeParams.contains($DANGEROUS_PARAM) { ... }
+
+    example:
+        syntax: swift
+        code: |
+          let cmd = "ls \(userInput)"
+          Process.create(cmd).launch()

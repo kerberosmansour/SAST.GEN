@@ -1,0 +1,15 @@
+rules:
+  - id: csharp-roslyn-compile-user-input
+    patterns:
+      - pattern: |
+          Microsoft.CodeAnalysis.CSharp.CSharpScript.EvaluateAsync($CODE)
+      - pattern-either:
+          - pattern: $CODE = Request["..."]
+          - pattern: $CODE = Request.Form["..."]
+          - pattern: $CODE = Request.QueryString["..."]
+    message: "Avoid using Roslyn API for dynamic script compilation with user inputs to prevent code injection vulnerabilities."
+    severity: ERROR
+    languages: [csharp]
+    metadata:
+      cwe: CWE-94
+      owasp: A1:2017-Injection

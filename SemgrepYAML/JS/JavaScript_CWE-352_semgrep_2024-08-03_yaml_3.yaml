@@ -1,0 +1,13 @@
+rules:
+  - id: react-csrf
+    languages: [javascript, typescript]
+    message: Ensure that CSRF tokens are included in forms or fetch requests.
+    patterns:
+      - pattern: |
+          fetch(...);
+      - metavariable-pattern:
+          metavariable: $X
+          patterns:
+            - pattern-not: |
+                'X-CSRF-Token'
+    severity: ERROR

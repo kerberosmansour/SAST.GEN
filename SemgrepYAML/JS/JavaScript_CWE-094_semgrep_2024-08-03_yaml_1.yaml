@@ -1,0 +1,10 @@
+rules:
+  - id: generic-code-injection
+    patterns:
+      - pattern: |
+          eval($CODE)
+      - pattern-not: |
+          eval(safeFunction($CODE))
+    message: "Possible code injection vulnerability using eval() detected."
+    languages: [javascript]
+    severity: ERROR

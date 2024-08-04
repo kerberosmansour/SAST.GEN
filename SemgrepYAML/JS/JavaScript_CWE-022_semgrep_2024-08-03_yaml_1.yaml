@@ -1,0 +1,12 @@
+rules:
+  - id: path-traversal-javascript
+    pattern: |
+      $res.sendFile($PATH, {
+        root: $ROOT
+      })
+    message: "Potential Path Traversal vulnerability: Using raw paths in sendFile"
+    severity: WARNING
+    languages:
+      - javascript
+    metadata:
+      cwe: "CWE-22"

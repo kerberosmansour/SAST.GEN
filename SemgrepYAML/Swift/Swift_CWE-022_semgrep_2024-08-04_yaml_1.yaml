@@ -1,0 +1,15 @@
+rules:
+- id: swift-path-traversal-explicit
+  languages: [swift]
+  message: |
+    Unsafe path traversal detected. Input paths should be validated to ensure they do not contain traversal sequences or other unsafe content.
+  severity: ERROR
+  patterns:
+    - pattern: |
+        let $PATH = ...
+        ... FileManager.default.contents(atPath: $PATH)
+    - metavariable-pattern:
+        metavariable: $PATH
+        patterns:
+          - pattern: ... + "../" + ...
+          - pattern: ... + "..\\" + ...

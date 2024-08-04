@@ -1,0 +1,25 @@
+rules:
+  - id: file-upload-with-type-check
+    languages: [javascript]
+    message: "File upload without type check (CWE-434) in JavaScript"
+    severity: ERROR
+    pattern: |
+      const $VAR = req.files.$FILE;
+      if (!$VAR.mimetype.startsWith('image/')) {
+        ...
+      }
+      $VAR.mv(...);
+    metadata:
+      cwe: "CWE-434"
+    examples:
+      - code: |
+          const file = req.files.uploadedFile;
+          if (!file.mimetype.startsWith('image/')) {
+            return res.status(400).send('Invalid file type');
+          }
+          file.mv('/uploads/' + file.name);
+        not-apply: true
+      - code: |
+          const secureFile = req.files.secureUpload;
+          secureFile.mv('/uploads/' + secureFile.name);
+        apply: true

@@ -1,0 +1,20 @@
+rules:
+  - id: csharp-unsafe-shell-command-construction
+    languages: [csharp]
+    message: |
+      Detected construction of shell command using string concatenation or interpolation with unchecked variables (potential command injection).
+    severity: ERROR
+    patterns:
+      - pattern-either:
+          - pattern: |
+              var command = $UNTRUSTED_VAR + ...;
+              $PROCESS.Start(command);
+          - pattern: |
+              var command = $"{... $UNTRUSTED_VAR ...}";
+              $PROCESS.Start(command);
+          - pattern: |
+              var command = string.Format(... $UNTRUSTED_VAR ...);
+              $PROCESS.Start(command);
+      - metavariable-pattern:
+          metavariable: $UNTRUSTED_VAR
+          pattern-not: $SAFE_VAR

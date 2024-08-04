@@ -1,0 +1,4 @@
+- pattern-not: HtmlEncode($USER_INPUT)
+     - pattern-not: AntiXssEncoder.HtmlEncode($USER_INPUT, ...)
+     - pattern-not: HtmlUtility.Encode($USER_INPUT)
+     - pattern-not: HttpUtility.HtmlEncode($USER_INPUT)

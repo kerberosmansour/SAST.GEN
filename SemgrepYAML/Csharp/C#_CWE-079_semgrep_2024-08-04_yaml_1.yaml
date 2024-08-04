@@ -1,0 +1,33 @@
+rules:
+  - id: xss-detection-in-csharp
+    languages: [csharp]
+    message: "Potential XSS vulnerability detected"
+    severity: ERROR
+    patterns:
+      # Detect unsafe handling of user input directly in response or HTML output
+      - pattern: |
+          Response.Write($USER_INPUT)
+      - pattern: |
+          $OUTPUT.Text = $USER_INPUT
+      - pattern: |
+          $OUTPUT.InnerHtml = $USER_INPUT
+      - pattern: |
+          $HTML_RENDER($USER_INPUT)
+      # Metavariable pattern to detect unsafe transformation of user input into HTML
+      - metavariable-pattern:
+          metavariable: $USER_INPUT
+          patterns:
+            - pattern: HttpContext.Current.Request[$ANY]
+            - pattern: Request.QueryString[$ANY]
+            - pattern: Request.Form[$ANY]
+            - pattern: Request.Params[$ANY]
+            - pattern: Request[$ANY]
+            - pattern: Request.Headers[$ANY]
+      # Ensure user input is not sanitized
+      - metavariable-pattern:
+          metavariable: $USER_INPUT
+          patterns:
+            - pattern-not: HtmlEncode($USER_INPUT)
+            - pattern-not: AntiXssEncoder.HtmlEncode($USER_INPUT, ...)
+            - pattern-not: HtmlUtility.Encode($USER_INPUT)
+            - pattern-not: HttpUtility.HtmlEncode($USER_INPUT)

@@ -1,0 +1,18 @@
+rules:
+  - id: javascript-function-constructor-injection
+    languages: [javascript]
+    message: "Detected potential Expression Language Injection via Function constructor."
+    severity: ERROR
+    patterns:
+      - pattern: |
+          new Function($ARGS)
+      - metavariable-pattern:
+          metavariable: $ARGS
+          patterns:
+            - pattern-inside: |
+                $OBJ.$PROP
+            - pattern-inside: |
+                $OBJ[$PROP]
+    metadata:
+      cwe: "CWE-917"
+      owasp: "A1: Injection"

@@ -1,0 +1,15 @@
+rules:
+  - id: csharp-javascriptserializer-deserialization
+    languages: [csharp]
+    message: "Deserialization using JavaScriptSerializer of potentially untrusted data (CWE-502)"
+    severity: ERROR
+    patterns:
+      - pattern: |
+          var $DESERIALIZER = new JavaScriptSerializer();
+          $DESERIALIZER.Deserialize($INPUT);
+      - pattern: |
+          JavaScriptSerializer $DESERIALIZER = new JavaScriptSerializer();
+          $DESERIALIZER.Deserialize($INPUT);
+    metadata:
+      impact: "high"
+      confidence: "high"

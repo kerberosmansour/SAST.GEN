@@ -1,0 +1,19 @@
+rules:
+  - id: swift-code-injection
+    patterns:
+      # Match direct use of potentially dangerous methods
+      - pattern: |
+          let $VAR = ... // Any variable declaration
+          $VAR = $EXPR // Variable reassignment
+      - metavariable-pattern:
+          metavariable: $EXPR
+          pattern-either:
+            - pattern: inject(***)
+            - pattern: evaluate(***)
+            - pattern: """{code}""" // Example framework syntax
+    message: "Potential code injection vulnerability (CWE-094) detected."
+    languages: [swift]
+    severity: WARNING
+    metadata:
+      cwe: CWE-094
+      owasp: A01:2021-Injection

@@ -1,0 +1,13 @@
+rules:
+  - id: angular-csrf
+    languages: [typescript]
+    message: Ensure that CSRF tokens are validated in Angular forms.
+    patterns:
+      - pattern: |
+          this.http.post(..., ...);
+      - metavariable-pattern:
+          metavariable: $X
+          patterns:
+            - pattern-not: |
+                'X-CSRF-Token'
+    severity: ERROR

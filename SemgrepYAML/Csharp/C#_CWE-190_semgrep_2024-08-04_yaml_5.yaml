@@ -1,0 +1,10 @@
+rules:
+  - id: int-overflow-method-calls
+    languages: [csharp]
+    message: "Potential integer overflow with method calls"
+    severity: ERROR
+    patterns:
+      - pattern: $X = $FUNC1($Y) + $FUNC2($Z)
+      - metavariable-pattern:
+          metavariable: $Y
+          comparison: $FUNC1($Y) + $FUNC2($Z) < $FUNC1($Y)

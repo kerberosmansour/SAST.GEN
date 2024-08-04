@@ -1,0 +1,38 @@
+rules:
+  - id: link-following-vulnerability
+    languages: [swift]
+    message: |
+      Potential improper link resolution before file access.
+    patterns:
+      - pattern-either:
+          # Usage of fileManager.fileExists with unsafe link following
+          - pattern: |
+              if FileManager.default.fileExists(atPath: $PATH) {
+                ...
+                // Unsafe resolution or follow-up of symlink
+                ...
+                _ = try? FileManager.default.destinationOfSymbolicLink(atPath: $LINK_PATH)
+                ...
+              }
+          # Usage of realpath with unsafe link handling
+          - pattern: |
+              let fullPath = realpath($PATH, nil)
+              ...
+              // Unsafe resolution
+              ...
+              _ = $LINK.followSymlink(atPath: $LINK_PATH)
+          # Typical use in common Swift frameworks
+          - pattern: |
+              let contents = try $FILEMAN.default.contentsOfDirectory(atPath: $DIRECTORY)
+              for $ITEM in contents {
+                ...
+                if FileManager.default.isDeletableFile(atPath: $ITEM) {
+                  let destination = try FileManager.default.destinationOfSymbolicLink(atPath: $ITEM)
+                  ...
+                }
+              }
+    severity: WARNING
+    metadata:
+      cwe: "CWE-059"
+      references:
+        - "https://cwe.mitre.org/data/definitions/59.html"

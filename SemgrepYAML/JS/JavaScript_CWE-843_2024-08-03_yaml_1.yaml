@@ -1,0 +1,43 @@
+rules:
+  - id: type-confusion-js
+    description: Detects Type Confusion vulnerabilities in JavaScript
+    languages: [javascript]
+    severity: ERROR
+    message: Access of resource using incompatible type ('Type Confusion') detected
+    metadata:
+      cwe: CWE-843
+    patterns:
+      - pattern: |
+          function $FUNC($ARG) {
+            ...
+            if ($ARG.$FIELD !== undefined) {
+              $VAR = $ARG.$FIELD;
+            }
+            ...
+          }
+      - metavariable-pattern:
+          metavariable: $FIELD
+          pattern: string|number|object|boolean
+    pattern-either:
+      - pattern: |
+          $OBJ = { $FIELD: $VAL };
+          $FUNC($OBJ);
+      - pattern: |
+          $FUNC({ $FIELD: $VAL });
+    pattern-not:
+      pattern: |
+        typeof $ARG.$FIELD !== typeof $VAR
+    message: Potential Type Confusion: "$FIELD" is being accessed with inconsistent types
+    severity: HIGH
+    paths:
+      include:
+        - "**/*.js"
+        - "**/*.jsx"
+        - "**/*.ts"
+        - "**/*.tsx"
+    metadata:
+      cwe: CWE-843
+      confidence: HIGH
+      impact: HIGH
+      likelihood: MEDIUM
+      subcategory: vuln

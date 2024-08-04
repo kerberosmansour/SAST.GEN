@@ -1,0 +1,20 @@
+- id: vapor-env-path-swift
+  languages: [swift]
+  message: "Uncontrolled search path element in Vapor framework"
+  severity: WARNING
+  patterns:
+    - pattern: |
+        let envPaths = Environment.get("$KEY")
+    - pattern-either:
+        - pattern: |
+            let paths = Environment.get("$KEY")?.split(separator: ":")
+        - pattern: |
+            let path = Environment.get("$KEY")
+          
+metavariable-regex:
+  $KEY: '^PATH$|^DYLD_LIBRARY_PATH$|^DYLD_FRAMEWORK_PATH$'
+
+metadata:
+  cwe: "CWE-427"
+  owasp: "A9:2021-Insecure Design"
+  source: "https://example.com/cwe-427"

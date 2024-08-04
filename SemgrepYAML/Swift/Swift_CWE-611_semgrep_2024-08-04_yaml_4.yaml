@@ -1,0 +1,10 @@
+rules:
+  - id: swift-xml-disable-external-entities
+    patterns:
+      - pattern: |
+          $XMLPARSER.shouldResolveExternalEntities = false
+    message: "Ensure external entities are disabled for secure XML processing"
+    languages: [swift]
+    severity: INFO
+    metadata:
+      cwe: CWE-611

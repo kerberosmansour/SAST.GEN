@@ -1,0 +1,17 @@
+rules:
+  - id: csharp-secure-file-handling
+    patterns:
+      - pattern: |
+          var $FILE = Request.Form.Files[...];
+          if (... $FILE == null ...)
+          {
+              ...
+          }
+      - pattern-inside: |
+          if (!IsValidType($FILE))
+          {
+              $UPLOAD_STATEMENT;
+          }
+    message: Uploaded files are not securely handled or validated.
+    languages: [csharp]
+    severity: ERROR

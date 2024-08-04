@@ -1,0 +1,11 @@
+rules:
+  - id: remotecert-validation
+    languages:
+      - csharp
+    message: Improper Certificate Validation via RemoteCertificateValidationCallback
+    severity: ERROR
+    patterns:
+      - pattern: |
+          RemoteCertificateValidationCallback $RC = delegate { return true; };
+      - pattern: |
+          RemoteCertificateValidationCallback $RC = (sender, cert, chain, sslPolicyErrors) => true;

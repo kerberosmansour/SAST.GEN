@@ -1,0 +1,16 @@
+rules:
+  - id: servercert-validation
+    languages:
+      - csharp
+    message: Improper Certificate Validation via ServicePointManager.ServerCertificateValidationCallback
+    severity: ERROR
+    patterns:
+      - pattern: |
+          ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
+      - pattern: |
+          ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+      - pattern: |
+          ServicePointManager.ServerCertificateValidationCallback = delegate(object sender,
+                                                                               X509Certificate cert, 
+                                                                               X509Chain chain, 
+                                                                               SslPolicyErrors sslPolicyErrors) { return true; };

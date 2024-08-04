@@ -1,0 +1,6 @@
+rules:
+  - id: cwe-319-cleartext-transmission
+    languages: [swift]
+    message: "Cleartext transmission of sensitive information"
+    severity: ERROR
+    patterns:

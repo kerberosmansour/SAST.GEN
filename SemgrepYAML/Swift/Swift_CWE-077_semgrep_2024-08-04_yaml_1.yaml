@@ -1,0 +1,67 @@
+rules:
+  - id: swift-command-injection
+    languages: [swift]
+    message: "Potential Command Injection found due to improper handling of command-line inputs"
+    severity: ERROR
+    patterns:
+      - pattern: $COMMAND = Process()
+      - pattern-inside: |
+          func $FUNC(...) {
+            ...
+            $COMMAND.launchPath = $PATH
+            $COMMAND.arguments = [...]
+            ...
+            $COMMAND.launch()
+            ...
+          }
+      - pattern-not: |
+          $COMMAND.arguments = [
+            ...
+            $SAFE_INPUT,
+            ...
+          ]
+    metavariable-comparison:
+      - metavariable: $SAFE_INPUT
+        comparison: $SAFE_INPUT != safeUserInput($ANY)
+      
+  - id: shell-command-exec-method
+    languages: [swift]
+    message: "Direct call to shell command execution detected, which could lead to command injection"
+    severity: WARNING
+    pattern: |
+      Process.launchedProcess(launchPath: $PATH, arguments: [$ARG, ...])
+    metavariable-pattern:
+      metavariable: $ARG
+      patterns:
+        - pattern-not: safeUserInput($ANY)
+
+  - id: command-injection-hardcoding-check
+    languages: [swift]
+    message: "Hardcoded command execution found, review to prevent command injection"
+    severity: WARNING
+    pattern: |
+      $COMMAND = Process()
+      $COMMAND.launchPath = $HARDCODED_PATH
+
+  - id: tainted-data-injection
+    languages: [swift]
+    message: "Potential use of tainted data in command execution, review for command injection risk"
+    severity: ERROR
+    pattern: |
+      let $INJECTED_DATA = $TAINTED_SOURCE
+      ...
+      $COMMAND = Process()
+      ...
+      $COMMAND.arguments = [
+        ...
+        $INJECTED_DATA,
+        ...
+      ]
+    patterns:
+      - pattern: let $INJECTED_DATA = $TAINTED_SOURCE
+    metavariable-pattern:
+      metavariable: $TAINTED_SOURCE
+      patterns:
+        - pattern-either:
+            - pattern: unsafeUserInput(...)
+            - pattern: taintedData(...)

@@ -1,0 +1,11 @@
+rules:
+  - id: int-overflow-loop
+    languages: [csharp]
+    message: "Potential integer overflow in loop increment"
+    severity: ERROR
+    patterns:
+      - pattern: |
+          for (int $I = 0; $I < $X; $I++)
+      - metavariable-pattern:
+          metavariable: $I
+          comparison: $I + 1 < $I

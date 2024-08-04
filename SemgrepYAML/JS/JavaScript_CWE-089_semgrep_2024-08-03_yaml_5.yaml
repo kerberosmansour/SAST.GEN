@@ -1,0 +1,15 @@
+rules:
+  - id: js-nosqlinjection-mongodb
+    patterns:
+      - pattern: |
+          db.collection('${COLLECTION}')
+            .find({ $CONDITION: $USER_INPUT })
+      - pattern: |
+          db.collection(${COLLECTION})
+            .find({ $CONDITION: $USER_INPUT })
+    languages: [javascript]
+    message: "Possible NoSQL Injection vulnerability with MongoDB."
+    severity: ERROR
+    metadata:
+      cwe: CWE-089
+      owasp: A1:2017-Injection

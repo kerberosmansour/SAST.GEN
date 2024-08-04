@@ -1,0 +1,12 @@
+rules:
+  - id: csharp-upload-directory-restriction-missing
+    pattern: |
+        Directory.CreateDirectory(...);
+        var path = Path.Combine(uploadFolder, $FILE.FileName);
+        using (var stream = new FileStream(path, FileMode.Create))
+        {
+            ...
+        }
+    message: Missing upload directory restrictions. Ensure uploads are saved in a safe directory.
+    languages: [csharp]
+    severity: ERROR

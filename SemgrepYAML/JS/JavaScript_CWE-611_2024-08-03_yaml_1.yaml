@@ -1,0 +1,24 @@
+rules:
+  - id: improper-xxe-JS
+    patterns:
+      - pattern: >
+          const parser = new $PARSER({
+            ...
+          });
+          ...
+          parser.parse(...);
+    patterns-inside:
+      - pattern-not: new $PARSER({
+            expand_entities: true,
+            ...
+          });
+
+    message: Improper restriction of XML external entity reference (XXE) detected. Ensure that `expand_entities` is set to `true`.
+    languages: [javascript]
+    severity: ERROR
+    metadata:
+      cwe: "CWE-611"
+      confidence: HIGH
+      likelihood: HIGH
+      impact: HIGH
+      subcategory: vulns

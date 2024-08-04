@@ -1,0 +1,15 @@
+rules:
+  - id: csharp-scriptengine-user-input
+    patterns:
+      - pattern: |
+          Microsoft.ClearScript.ScriptEngine.Execute($SCRIPT)
+      - pattern-either:
+          - pattern: $SCRIPT = Request["..."]
+          - pattern: $SCRIPT = Request.Form["..."]
+          - pattern: $SCRIPT = Request.QueryString["..."]
+    message: "Avoid using Microsoft.ClearScript.ScriptEngine.Execute with user inputs to prevent script injection vulnerabilities."
+    severity: ERROR
+    languages: [csharp]
+    metadata:
+      cwe: CWE-94
+      owasp: A1:2017-Injection

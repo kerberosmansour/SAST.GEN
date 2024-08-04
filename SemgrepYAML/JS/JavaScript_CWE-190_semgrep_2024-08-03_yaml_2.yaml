@@ -1,0 +1,18 @@
+rules:
+  - id: javascript-loop-integer-overflow
+    languages: [javascript]
+    message: "Potential integer overflow or wraparound detected in loop construct."
+    severity: WARNING
+    patterns:
+      - pattern: |
+          for (let $VAR = $START; $VAR < $COND; $VAR++) {
+            ...
+          }
+    metavariable-pattern:
+      metavariable: $START
+      comparison: $START > Number.MAX_SAFE_INTEGER
+      message: "Loop start value might cause overflow."
+    metavariable-pattern:
+      metavariable: $COND
+      comparison: $COND > Number.MAX_SAFE_INTEGER
+      message: "Loop condition might cause overflow."

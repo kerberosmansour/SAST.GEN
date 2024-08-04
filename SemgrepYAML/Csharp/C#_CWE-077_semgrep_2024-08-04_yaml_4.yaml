@@ -1,0 +1,13 @@
+rules:
+  - id: csharp-process-cmd-c-injection 
+    languages: [csharp]
+    message: Potential command injection vulnerability in cmd /c
+    severity: ERROR
+    patterns:
+      - pattern: |
+            using System.Diagnostics;
+            ...
+            Process.Start("cmd.exe", "/c " + $UNSAFE_COMMAND );
+      - metavariable-pattern:
+          metavariable: $UNSAFE_COMMAND
+          pattern-not: $SAFE_COMMAND

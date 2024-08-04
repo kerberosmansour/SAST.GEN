@@ -1,0 +1,16 @@
+rules:
+  - id: expression-language-injection
+    patterns:
+      - pattern: |
+          ${$VAR}
+      - pattern: |
+          <c:set var="$VAR" value="${...}" />
+      - pattern: |
+          render(${...})
+    message: Potential Expression Language Injection (CWE-917)
+    languages:
+      - java
+    severity: ERROR
+    metadata:
+      category: security
+      cwe: CWE-917

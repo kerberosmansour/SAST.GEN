@@ -1,0 +1,9 @@
+rules:
+  - id: xmldom-external-entity
+    languages: [javascript]
+    message: Ensure `xmldom` parser does not resolve external entities to prevent XXE vulnerability.
+    severity: ERROR
+    pattern: |
+        new xmldom.DOMParser().parseFromString(...)
+    pattern-not-inside: |
+        'disableExternalEntities': true

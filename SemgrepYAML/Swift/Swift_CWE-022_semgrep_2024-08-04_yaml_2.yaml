@@ -1,0 +1,17 @@
+rules:
+- id: swift-path-traversal-vapor
+  languages: [swift]
+  message: |
+    Potential path traversal vulnerability in a Vapor route. Validate and sanitize incoming 'file' parameter.
+  severity: ERROR
+  pattern-either:
+    - pattern: |
+        app.get("download", ":file") { req -> EventLoopFuture<Response> in
+            let file = try req.parameters.require("file")
+            ...
+            return ...
+    - pattern: |
+        app.post("upload", ":file") { req -> EventLoopFuture<Response> in
+            let file = try req.parameters.require("file")
+            ...
+            return ...

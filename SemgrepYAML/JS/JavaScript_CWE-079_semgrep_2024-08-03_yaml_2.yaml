@@ -1,0 +1,15 @@
+rules:
+  - id: xss-detection-react
+    message: "Potential Cross-Site Scripting (XSS) vulnerability in React"
+    languages: [javascript, typescript]
+    severity: ERROR
+    patterns:
+      - pattern-either:
+          - pattern: |
+              <$ELEMENT dangerouslySetInnerHTML={{ __html: $X }} />
+          - pattern: |
+              $ELEMENT.props.dangerouslySetInnerHTML = { __html: $X }
+    metadata:
+      cwe: "CWE-079"
+      owasp: "A7:2017- Cross-Site Scripting (XSS)"
+      description: "Detects usage of 'dangerouslySetInnerHTML' in React applications, which may lead to XSS attacks."

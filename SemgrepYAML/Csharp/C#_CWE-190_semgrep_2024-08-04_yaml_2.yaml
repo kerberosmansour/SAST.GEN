@@ -1,0 +1,11 @@
+rules:
+  - id: int-overflow-multiplication
+    languages: [csharp]
+    message: "Potential integer overflow in multiplication operation"
+    severity: ERROR
+    patterns:
+      - pattern: |
+          int $X = $Y * $Z
+      - metavariable-pattern:
+          metavariable: $Y
+          comparison: $Y * $Z / $Z != $Y

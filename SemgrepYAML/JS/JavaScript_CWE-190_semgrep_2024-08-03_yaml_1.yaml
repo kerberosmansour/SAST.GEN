@@ -1,0 +1,20 @@
+rules:
+  - id: javascript-integer-overflow
+    languages: [javascript]
+    message: "Potential integer overflow or wraparound detected in arithmetic operation."
+    severity: WARNING
+    patterns:
+      - pattern-either:
+        - pattern: $VAR1 + $VAR2
+        - pattern: $VAR1 - $VAR2
+        - pattern: $VAR1 * $VAR2
+        - pattern: $VAR1 / $VAR2
+        - pattern: $VAR1 % $VAR2
+    metavariable-pattern:
+      metavariable: $VAR1
+      comparison: $VAR1 > Number.MAX_SAFE_INTEGER
+      message: "Operation involves variables that might cause overflow."
+    metavariable-pattern:
+      metavariable: $VAR2
+      comparison: $VAR2 > Number.MAX_SAFE_INTEGER
+      message: "Operation involves variables that might cause overflow."

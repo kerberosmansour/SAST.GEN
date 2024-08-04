@@ -1,0 +1,15 @@
+rules:
+  - id: js-sqlinjection-sequelize-raw
+    patterns:
+      - pattern: sequelize.query($QUERY, ...)
+      - pattern: db.query($QUERY, ...)
+      - metavariable-pattern:
+          metavariable: $QUERY
+          patterns:
+            - pattern-not: '... ? ...'
+    languages: [javascript]
+    message: "Possible SQL Injection in Sequelize raw query."
+    severity: ERROR
+    metadata:
+      cwe: CWE-089
+      owasp: A1:2017-Injection

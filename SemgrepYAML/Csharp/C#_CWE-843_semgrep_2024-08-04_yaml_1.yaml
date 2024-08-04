@@ -1,0 +1,9 @@
+rules:
+  - id: csharp-type-confusion
+    patterns:
+      - pattern: $VAR1 = ($CASTTYPE)$VAR2
+      - ellipsis: ...
+      - pattern-not: $CASTTYPE == typeof($VAR2)
+    message: Potential type confusion detected where $VAR2 is cast to $CASTTYPE
+    languages: [csharp]
+    severity: ERROR

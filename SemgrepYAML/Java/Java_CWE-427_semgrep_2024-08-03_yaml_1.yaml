@@ -1,0 +1,20 @@
+rules:
+  - id: java-uncontrolled-search-path-element
+    languages: [java]
+    message: "Uncontrolled Search Path Element (CWE-427) detected"
+    severity: ERROR
+    patterns:
+      - pattern: $VAR = System.getenv($ENV_VAR)
+      - metavariable-pattern:
+          metavariable: $ENV_VAR
+          pattern: *PATH
+    - pattern-let: |
+        $PATH_ELEMENT = $METHOD_CALL(...)
+        ...
+    - patterns:
+        - pattern-either:
+            - pattern: Runtime.getRuntime().exec($PATH_ELEMENT)
+            - pattern: new ProcessBuilder($PATH_ELEMENT).start()
+        - metavariable-pattern:
+            metavariable: $METHOD_CALL
+            pattern: System.getenv

@@ -1,0 +1,17 @@
+rules:
+  - id: ssrf-axios-request
+    patterns:
+      - pattern: |
+          axios.get($URL, ...)
+      - pattern-not: |
+          // safeURLPattern is a regex or logic that matches only safe URLs
+          var safeURLPattern = ...
+          if(safeURLPattern.test($URL)) {
+            axios.get($URL, ...)
+          }
+    message: |
+      Possible SSRF vulnerability via 'axios.get'
+    severity: ERROR
+    languages: [javascript]
+    metadata:
+      cwe: 918

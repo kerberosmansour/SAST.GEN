@@ -1,0 +1,14 @@
+rules:
+- id: csharp-sql-injection-tainted-flow
+  patterns:
+    - pattern-inside: |
+        {
+          var $VAR = ...;
+          new SqlCommand(... + $VAR + ...);
+        }
+  message: "Possible SQL Injection vulnerability: tainted data is flowing into SQL query."
+  severity: ERROR
+  languages: [csharp]
+  metadata:
+    cwe: "CWE-089"
+    owasp: "A1: Injection"

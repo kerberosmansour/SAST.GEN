@@ -1,0 +1,28 @@
+rules:
+  - id: path-traversal-node
+    pattern: |
+      require("fs").readFile(..., $PATH, ...)
+    message: "fs.readFile with user-controlled paths can lead to Path Traversal"
+    severity: ERROR
+    languages:
+      - javascript
+    metadata:
+      cwe: "CWE-22"
+  - id: path-traversal-node-fs
+    pattern: |
+      require("fs").readFileSync(..., $PATH, ...)
+    message: "fs.readFileSync with user-controlled paths can lead to Path Traversal"
+    severity: ERROR
+    languages:
+      - javascript
+    metadata:
+      cwe: "CWE-22"
+  - id: path-traversal-node-open
+    pattern: |
+      require("fs").open(..., $PATH, ...)
+    message: "fs.open with user-controlled paths can lead to Path Traversal"
+    severity: ERROR
+    languages:
+      - javascript
+    metadata:
+      cwe: "CWE-22"

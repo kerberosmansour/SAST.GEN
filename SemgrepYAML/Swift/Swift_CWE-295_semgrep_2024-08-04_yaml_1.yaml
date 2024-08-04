@@ -1,0 +1,45 @@
+rules:
+  - id: improper-certificate-validation-urlsession
+    languages: [swift]
+    message: "Improper certificate validation using URLSession"
+    severity: ERROR
+    patterns:
+      - pattern: |
+          let session = URLSession(configuration: .default, delegate: $DELEGATE, delegateQueue: nil)
+      - pattern-sources:
+          - pattern: |
+              $DELEGATE.urlSession(_:didReceive:completionHandler:)
+      - pattern-sinks:
+          - pattern: |
+              completionHandler(NSURLSession.AuthChallengeDisposition.useCredential, $CREDENTIAL)
+    metadata:
+      cwe: "CWE-295"
+      description: "This rule detects improper certificate validation using URLSession by allowing any certificate without proper validation."
+  
+  - id: improper-certificate-validation-nsurlconnection
+    languages: [swift]
+    message: "Improper certificate validation using NSURLConnection"
+    severity: ERROR
+    patterns:
+      - pattern: |
+          func connection(_ connection: NSURLConnection, willSendRequestFor challenge: URLAuthenticationChallenge) {
+              let credential = URLCredential($CREDENTIAL)
+              challenge.sender?.use(credential, for: challenge)
+          }
+    metadata:
+      cwe: "CWE-295"
+      description: "This rule detects improper certificate validation using NSURLConnection."
+
+  - id: improper-certificate-validation-alamofire
+    languages: [swift]
+    message: "Improper certificate validation using Alamofire"
+    severity: ERROR
+    patterns:
+      - pattern: |
+          let manager = Alamofire.SessionManager.default
+          manager.delegate.sessionDidReceiveChallenge = { session, challenge in
+              return (.useCredential, URLCredential(trust: challenge.protectionSpace.serverTrust!))
+          }
+    metadata:
+      cwe: "CWE-295"
+      description: "This rule detects improper certificate validation using Alamofire by allowing any certificate without proper validation."

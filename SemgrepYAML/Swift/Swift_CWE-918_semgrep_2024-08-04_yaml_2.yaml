@@ -1,0 +1,14 @@
+rules:
+  - id: ssrf-alamofire
+    languages: [swift]
+    message: "Potential SSRF via Alamofire"
+    severity: ERROR
+    patterns:
+      - pattern: |
+          AF.request($URL, ...)
+      - pattern-scope: $URL
+        patterns:
+          - pattern-not: "fixedURL"
+    metadata:
+      cwe: "CWE-918"
+      owasp: "A10:2019"

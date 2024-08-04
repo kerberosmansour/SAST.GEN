@@ -1,0 +1,9 @@
+rules:
+  - id: x509cert-createfromsignedfile
+    languages:
+      - csharp
+    message: Use of X509Certificate2.CreateFromSignedFile without validation
+    severity: WARNING
+    patterns:
+      - pattern: |
+          var $Cert = X509Certificate2.CreateFromSignedFile($path);

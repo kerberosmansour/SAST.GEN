@@ -1,0 +1,14 @@
+rules:
+  - id: csharp-httpwebrequest-create
+    patterns:
+      - pattern: |
+          HttpWebRequest $REQUEST = (HttpWebRequest)WebRequest.Create($URL);
+      - metavariable-pattern:
+          metavariable: $URL
+          patterns:
+            - pattern: $USER_INPUT
+    message: "Potential SSRF vulnerability: HttpWebRequest.Create can be exploited if $URL is user-controlled."
+    languages: [csharp]
+    severity: WARNING
+    metadata:
+      cwe: "CWE-918: Server-Side Request Forgery (SSRF)"

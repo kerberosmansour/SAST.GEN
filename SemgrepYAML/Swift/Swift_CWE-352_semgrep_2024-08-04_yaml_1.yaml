@@ -1,0 +1,14 @@
+rules:
+  - id: csrf-detection-urlsession
+    patterns:
+      - pattern: |
+          let $VAR = URLSession.shared.dataTask(with: $REQUEST)
+      - pattern-either:
+          - pattern-not: |
+              $TASK.resume()
+          - pattern-inside:
+              - pattern: |
+                  $REQUEST.addValue("X-CSRF-Token", forHTTPHeaderField: "X-CSRF-Token")
+    message: HTTP request without CSRF protection.
+    severity: WARNING
+    languages: [swift]

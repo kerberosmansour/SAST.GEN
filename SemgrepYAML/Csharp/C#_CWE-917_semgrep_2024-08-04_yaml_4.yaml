@@ -1,0 +1,11 @@
+rules:
+  - id: csharp-el-injection-razor-views
+    patterns:
+      - pattern-either:
+          - pattern: |
+              @Html.Raw($EXPR)
+          - pattern: |
+              @{$EXPR}
+    languages: [csharp]
+    severity: ERROR
+    message: "Potential Expression Language Injection detected in Razor views with @Html.Raw or inline code blocks."

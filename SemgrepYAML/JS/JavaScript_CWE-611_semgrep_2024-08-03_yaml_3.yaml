@@ -1,0 +1,7 @@
+rules:
+  - id: libxmljs-external-entity
+    languages: [javascript]
+    message: Ensure external entity loading is disabled when using `libxmljs` to prevent XXE vulnerability.
+    severity: ERROR
+    pattern: |
+        libxmljs.parseXml(...).setDtdLoad(false).setDtdAttr(false)

@@ -1,0 +1,15 @@
+rules:
+  - id: csharp-command-exec-user-input
+    patterns:
+      - pattern: |
+          System.Diagnostics.Process.Start($CMD)
+      - pattern-either:
+          - pattern: $CMD = Request["..."]
+          - pattern: $CMD = Request.Form["..."]
+          - pattern: $CMD = Request.QueryString["..."]
+    message: "Avoid using System.Diagnostics.Process.Start() with user inputs to prevent command injection vulnerabilities."
+    severity: ERROR
+    languages: [csharp]
+    metadata:
+      cwe: CWE-94
+      owasp: A1:2017-Injection

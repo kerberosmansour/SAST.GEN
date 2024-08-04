@@ -1,0 +1,16 @@
+rules:
+  - id: csharp-process-start-command-injection
+    languages: [csharp]
+    message: Detected potential command injection via Process.Start with unchecked user input.
+    severity: ERROR
+    patterns:
+      - pattern-either:
+          - pattern: |
+              using System.Diagnostics;
+              ...
+              var process = Process.Start($COMMAND);
+          - pattern: |
+              System.Diagnostics.Process.Start($COMMAND);
+      - metavariable-pattern:
+          metavariable: $COMMAND
+          pattern-not: $SAFE_COMMAND

@@ -1,0 +1,23 @@
+rules:
+  - id: java-command-injection
+    languages: [java]
+    message: "Possible Command Injection (CWE-077)"
+    severity: ERROR
+    patterns:
+      - pattern: $PROC = Runtime.getRuntime().exec($CMD)
+      - pattern: $PROC = Runtime.getRuntime().exec($CMD, ...)
+      - pattern: $PROC = new ProcessBuilder($CMDS...).start()
+      - pattern: new ProcessBuilder($CMDS...).start()
+      - pattern: Runtime.getRuntime().exec($CMD)
+      - pattern: Runtime.getRuntime().exec($CMD, ...)
+    metavariable-regex:
+      CMD: "...(:?[`|&;'])..."
+      CMDS: "...(:?[`|&;'])..."
+    message: |
+      Potential command injection detected. Avoid using Runtime.exec or ProcessBuilder with user input.
+
+      The following constructs are detected:
+        - Runtime.getRuntime().exec
+        - ProcessBuilder.start
+
+      Ensure to properly validate and sanitize the inputs.

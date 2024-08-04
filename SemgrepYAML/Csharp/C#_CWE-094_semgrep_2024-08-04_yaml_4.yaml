@@ -1,0 +1,15 @@
+rules:
+  - id: csharp-dynamic-compilation-user-input
+    patterns:
+      - pattern: |
+          HttpContext.Current.Application[$KEY] = $VALUE
+      - pattern-either:
+          - pattern: $VALUE = Request["..."]
+          - pattern: $VALUE = Request.Form["..."]
+          - pattern: $VALUE = Request.QueryString["..."]
+    message: "Avoid dynamic compilation or execution using HttpContext with user inputs to prevent code injection vulnerabilities."
+    severity: ERROR
+    languages: [csharp]
+    metadata:
+      cwe: CWE-94
+      owasp: A1:2017-Injection

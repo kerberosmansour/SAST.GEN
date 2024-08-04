@@ -1,0 +1,18 @@
+rules:
+  - id: csharp-unrestricted-file-upload
+    patterns:
+      - pattern: |
+          public IActionResult Upload(IFormFile $FILE)
+          {
+              ...
+              $FILE.CopyTo(...);
+              ...
+          }
+      - pattern-inside: |
+          if (... !FileCheck($FILE) ...)
+          {
+              $UPLOAD_STATEMENT;
+          }
+    message: Detected an unrestricted file upload. Ensure only safe file types are allowed.
+    languages: [csharp]
+    severity: ERROR

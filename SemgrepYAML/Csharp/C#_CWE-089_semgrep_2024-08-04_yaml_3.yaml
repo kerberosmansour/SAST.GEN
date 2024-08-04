@@ -1,0 +1,13 @@
+rules:
+- id: csharp-sql-injection-dapper-raw
+  patterns:
+    - pattern: "connection.Query<$TYPE>(\"...\")"
+    - metavariable-pattern:
+        metavariable: "$TYPE"
+        pattern-not: "SqlMapper.ICustomQueryParameter"
+  message: "Possible SQL Injection vulnerability: avoid using raw SQL with Dapper."
+  severity: ERROR
+  languages: [csharp]
+  metadata:
+    cwe: "CWE-089"
+    owasp: "A1: Injection"

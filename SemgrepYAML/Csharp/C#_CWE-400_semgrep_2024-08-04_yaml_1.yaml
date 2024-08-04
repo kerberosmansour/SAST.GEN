@@ -1,0 +1,32 @@
+rules:
+  - id: uncontrolled-resource-consumption-loop
+    languages: [csharp]
+    message: Potential uncontrolled resource consumption in a loop.
+    patterns:
+      - pattern: |
+          for (var $VAR = 0; $VAR < $LIMIT; $VAR++) { ... }
+      - metavariable-comparison:
+          metavariable: $LIMIT
+          comparison: $LIMIT > 10000  # Arbitrary high limit for demo purposes; refine as needed.
+    severity: ERROR
+
+  - id: uncontrolled-resource-consumption-stream
+    languages: [csharp]
+    message: Ensure the stream is properly closed or disposed to avoid resource exhaustion.
+    pattern: |
+      new $STREAM(...) { ... }
+    pattern-not: |
+      try { ... } finally { $STREAM.Close(); }
+    severity: WARNING
+
+  - id: uncontrolled-resource-recursion
+    languages: [csharp]
+    message: Recursive calls could lead to uncontrolled resource consumption.
+    pattern: |
+      $RET_TYPE $FUNC_NAME($ARGS) {
+        if ($CONDITION) {
+          return $FUNC_NAME($NEW_ARGS);
+        }
+        ...
+      }
+    severity: WARNING

@@ -1,0 +1,12 @@
+rules:
+  - id: vm-module-code-injection
+    patterns:
+      - pattern: |
+          const vm = require('vm');
+          vm.runInNewContext($CODE)
+      - pattern-not: |
+          const vm = require('vm');
+          vm.runInNewContext(safeFunction($CODE))
+    message: "Possible code injection vulnerability using vm.runInNewContext detected."
+    languages: [javascript]
+    severity: ERROR

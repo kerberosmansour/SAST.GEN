@@ -1,0 +1,13 @@
+rules:
+  - id: aspnetcore-formcollection-missing-anti-forgery-token
+    languages: [csharp]
+    message: "Action accepting FormCollection without anti-forgery validation can lead to CSRF vulnerabilities."
+    patterns:
+      - pattern-inside: |
+          public class $CONTROLLER : Controller
+      - pattern: |
+          public IActionResult $ACTION(FormCollection $FORM) {...}
+      - pattern-not: |
+          [ValidateAntiForgeryToken]
+          public IActionResult $ACTION(FormCollection $FORM) {...}
+    severity: ERROR

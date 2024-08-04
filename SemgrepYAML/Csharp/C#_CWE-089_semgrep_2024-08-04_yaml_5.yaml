@@ -1,0 +1,10 @@
+rules:
+- id: csharp-sql-injection-ef-raw
+  patterns:
+    - pattern: "$DB.Database.ExecuteSqlCommand(\"...\")"
+  message: "Possible SQL Injection vulnerability: avoid using raw SQL with Entity Framework."
+  severity: ERROR
+  languages: [csharp]
+  metadata:
+    cwe: "CWE-089"
+    owasp: "A1: Injection"

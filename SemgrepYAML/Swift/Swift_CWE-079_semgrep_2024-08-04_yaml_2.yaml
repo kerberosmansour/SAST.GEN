@@ -1,0 +1,13 @@
+rules:
+  - id: swift-xss-leaf-template
+    languages: [swift]
+    message: "Potential XSS vulnerability: Unencoded output in Leaf template"
+    severity: ERROR
+    pattern: |
+      try render($TEMPLATE, $CONTEXT)
+      ...
+      $TEMPLATE = "<html>\($USERINPUT)</html>"
+    metadata:
+      cwe: CWE-079
+      owasp: A7
+    severity: ERROR

@@ -1,0 +1,32 @@
+rules:
+- id: unrestricted-upload-dangerous-type
+  languages: [javascript]
+  message: "Potential unrestricted upload of file with dangerous type (CWE-434)."
+  severity: ERROR
+  patterns:
+    - pattern-either:
+        # For express-fileupload middleware
+        - pattern: |
+            app.use(fileUpload());
+            app.post('/upload', (req, res) => {
+              let sampleFile = req.files.sampleFile;
+              sampleFile.mv('/somewhere/on/your/server/');
+              ...
+            });
+
+        # For multer middleware
+        - pattern: |
+            const upload = multer({ dest: 'uploads/' });
+            app.post('/upload', upload.single('file'), (req, res) => {
+              ...
+            });
+            
+        # For other direct file system operations
+        - pattern: |
+            fs.writeFileSync('/somewhere/on/your/server/', ...);
+  metadata:
+    cwe: CWE-434
+    confidence: high
+    likelihood: high
+    impact: high
+    subcategory: vuln

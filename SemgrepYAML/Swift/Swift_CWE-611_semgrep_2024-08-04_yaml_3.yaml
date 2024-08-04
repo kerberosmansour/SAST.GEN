@@ -1,0 +1,10 @@
+rules:
+  - id: swift-nsxml-document
+    patterns:
+      - pattern: |
+          let $VAR = XMLDocument(contentsOf: URL(string: $URL)!)            
+    message: "Using XMLDocument with external entities enabled might lead to CWE-611 vulnerability"
+    languages: [swift]
+    severity: ERROR
+    metadata:
+      cwe: CWE-611

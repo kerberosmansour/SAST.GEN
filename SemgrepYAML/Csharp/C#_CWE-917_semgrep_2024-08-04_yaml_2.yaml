@@ -1,0 +1,12 @@
+rules:
+  - id: csharp-el-injection-from-input
+    patterns:
+      - pattern: |
+          $VAR = $INPUT
+      - pattern: |
+          $OBJ.DataBind()
+          ...
+          $VAR
+    languages: [csharp]
+    severity: ERROR
+    message: "Potential Expression Language Injection detected from user input in $VAR."

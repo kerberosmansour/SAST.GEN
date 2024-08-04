@@ -1,0 +1,11 @@
+rules:
+  - id: csharp-expression-language-injection
+    patterns:
+      - pattern-either:
+          - pattern: |
+              $OBJ.DataBind()
+          - pattern: |
+              ${{ }/*some pattern representing EL injection*/}
+    languages: [csharp]
+    severity: ERROR
+    message: "Potential Expression Language Injection detected in $OBJ.DataBind()."

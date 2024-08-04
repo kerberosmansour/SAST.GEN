@@ -1,0 +1,11 @@
+rules:
+  - id: js-sqlinjection-eval
+    patterns:
+      - pattern: eval("...SQL...")
+      - pattern: eval($SQL_COMMAND)
+    languages: [javascript]
+    message: "Use of eval() with SQL commands may lead to SQL Injection."
+    severity: ERROR
+    metadata:
+      cwe: CWE-089
+      owasp: A1:2017-Injection

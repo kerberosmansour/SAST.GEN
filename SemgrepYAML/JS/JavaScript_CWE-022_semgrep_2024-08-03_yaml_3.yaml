@@ -1,0 +1,15 @@
+rules:
+  - id: path-traversal-express
+    patterns:
+      - pattern: |
+          app.get($ROUTE, (req, res) => {
+            res.sendFile(req.params.file);
+          })
+      - pattern-inside: |
+          function $FUNC(req, res) {...}
+    message: "Express.js sendFile with user-controlled paths can lead to Path Traversal"
+    severity: ERROR
+    languages:
+      - javascript
+    metadata:
+      cwe: "CWE-22"

@@ -1,0 +1,18 @@
+rules:
+  - id: javascript-setinterval-injection
+    languages: [javascript]
+    message: "Detected potential Expression Language Injection via setInterval."
+    severity: ERROR
+    patterns:
+      - pattern: |
+          setInterval($EXPR, $TIME)
+      - metavariable-pattern:
+          metavariable: $EXPR
+          patterns:
+            - pattern-inside: |
+                $OBJ.$PROP
+            - pattern-inside: |
+                $OBJ[$PROP]
+    metadata:
+      cwe: "CWE-917"
+      owasp: "A1: Injection"

@@ -1,0 +1,27 @@
+rules:
+  - id: xss-detection-generic
+    message: "Potential Cross-Site Scripting (XSS) vulnerability"
+    languages: [javascript]
+    severity: ERROR
+    patterns:
+      - pattern-either:
+          - pattern: |
+              document.write($X)
+          - pattern: |
+              document.writeln($X)
+          - pattern: |
+              $NODE.innerHTML = $X
+          - pattern: |
+              $NODE.outerHTML = $X
+          - pattern: |
+              $NODE.insertAdjacentHTML(..., $X)
+          - pattern: |
+              eval($X)
+          - pattern: |
+              setTimeout($X, ...)
+          - pattern: |
+              setInterval($X, ...)
+    metadata:
+      cwe: "CWE-079"
+      owasp: "A7:2017- Cross-Site Scripting (XSS)"
+      description: "Detects direct usage of unsafe APIs which may lead to XSS attacks."

@@ -1,0 +1,2 @@
+- pattern: |
+        fs.readFileSync($PATH, ...)

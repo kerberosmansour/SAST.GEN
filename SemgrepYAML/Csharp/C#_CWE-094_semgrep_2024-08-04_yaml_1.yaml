@@ -1,0 +1,15 @@
+rules:
+  - id: csharp-eval-user-input
+    patterns:
+      - pattern: |
+          eval($INPUT)
+      - pattern-either:
+          - pattern: $INPUT = Request["..."]
+          - pattern: $INPUT = Request.Form["..."]
+          - pattern: $INPUT = Request.QueryString["..."]
+    message: "Avoid using eval() with user inputs to prevent code injection vulnerabilities."
+    severity: ERROR
+    languages: [csharp]
+    metadata:
+      cwe: CWE-94
+      owasp: A1:2017-Injection

@@ -1,0 +1,10 @@
+rules:
+  - id: function-constructor-code-injection
+    patterns:
+      - pattern: |
+          new Function($ARGS, $CODE)
+      - pattern-not: |
+          new Function($ARGS, safeFunction($CODE))
+    message: "Possible code injection vulnerability using the Function constructor detected."
+    languages: [javascript]
+    severity: ERROR

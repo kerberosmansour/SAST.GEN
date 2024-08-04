@@ -1,0 +1,15 @@
+rules:
+  - id: xss-detection-angular
+    message: "Potential Cross-Site Scripting (XSS) vulnerability in Angular"
+    languages: [typescript]
+    severity: ERROR
+    patterns:
+      - pattern-either:
+          - pattern: |
+              this.domSanitizer.bypassSecurityTrustHtml($X)
+          - pattern: |
+              this.domSanitizer.bypassSecurityTrustResourceUrl($X)
+    metadata:
+      cwe: "CWE-079"
+      owasp: "A7:2017- Cross-Site Scripting (XSS)"
+      description: "Detects unsafe usage of Angular's bypassSecurityTrust* APIs, which may lead to XSS attacks."

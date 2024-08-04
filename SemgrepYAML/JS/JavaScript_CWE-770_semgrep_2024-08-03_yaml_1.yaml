@@ -1,0 +1,21 @@
+rules:
+  - id: unrestricted-allocation-in-loop
+    languages: [javascript]
+    message: "Resource allocation without limits or throttling inside a loop can lead to DoS vulnerabilities."
+    severity: WARNING
+    patterns:
+      - pattern: |
+          for (...) {
+            ...
+            $RESOURCE = new $RESOURCE_TYPE(...);
+            ...
+          }
+      - pattern: |
+          while (...) {
+            ...
+            $RESOURCE = new $RESOURCE_TYPE(...);
+            ...
+          }
+    metadata:
+      cwe: "CWE-770"
+      owasp: "A6: Security Misconfiguration"

@@ -1,0 +1,20 @@
+- id: perfect-env-path-swift
+  languages: [swift]
+  message: "Uncontrolled search path element in Perfect framework"
+  severity: WARNING
+  patterns:
+    - pattern: |
+        let envPaths = PerfectEnv.getProcessInfo().environment["$KEY"]
+    - pattern-either:
+        - pattern: |
+            let paths = PerfectEnv.getProcessInfo().environment["$KEY"]?.split(separator: ":")
+        - pattern: |
+            let path = PerfectEnv.getProcessInfo().environment["$KEY"]
+          
+metavariable-regex:
+  $KEY: '^PATH$|^DYLD_LIBRARY_PATH$|^DYLD_FRAMEWORK_PATH$'
+
+metadata:
+  cwe: "CWE-427"
+  owasp: "A9:2021-Insecure Design"
+  source: "https://example.com/cwe-427"

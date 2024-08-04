@@ -1,0 +1,10 @@
+rules:
+- id: csharp-sql-injection-string-concat
+  patterns:
+    - pattern: "new SqlCommand(\"...\" + $VARIABLE + \"...\", $CONN)"
+  message: "Possible SQL Injection vulnerability: avoid concatenating SQL queries."
+  severity: ERROR
+  languages: [csharp]
+  metadata:
+    cwe: "CWE-089"
+    owasp: "A1: Injection"

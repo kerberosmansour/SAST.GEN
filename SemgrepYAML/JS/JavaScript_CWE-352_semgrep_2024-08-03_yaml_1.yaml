@@ -1,0 +1,13 @@
+rules:
+  - id: express-csrf
+    languages: [javascript]
+    message: Ensure that CSRF protection middleware is used.
+    patterns:
+      - pattern: |
+          app.use(...);
+      - metavariable-pattern:
+          metavariable: $X
+          patterns:
+            - pattern-not: |
+                csrf(...)
+    severity: ERROR

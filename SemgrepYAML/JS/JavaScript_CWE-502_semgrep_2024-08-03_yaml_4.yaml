@@ -1,0 +1,13 @@
+rules:
+  - id: expressjs-bodyparser-deserialization
+    languages: [javascript]
+    message: "Deserialization of untrusted data using bodyParser can lead to security vulnerabilities."
+    severity: ERROR
+    patterns:
+      - pattern-inside: |
+          app.use(...);
+      - metavariable-pattern:
+          metavariable: $X
+          patterns:
+            - pattern-not: |
+                $X.json()

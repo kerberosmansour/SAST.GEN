@@ -1,0 +1,19 @@
+rules:
+  - id: ssrf-express-user-input
+    patterns:
+      - pattern: |
+          app.get($ROUTE, (req, res) => {
+            http.get(req.query.url, ...)
+          })
+      - pattern-not: |
+          // safeURLPattern is a regex or logic that matches only safe URLs
+          var safeURLPattern = ...
+          if(safeURLPattern.test(req.query.url)) {
+            http.get(req.query.url, ...)
+          }
+    message: |
+      Potential SSRF vulnerability using user input in Express application
+    severity: ERROR
+    languages: [javascript]
+    metadata:
+      cwe: 918

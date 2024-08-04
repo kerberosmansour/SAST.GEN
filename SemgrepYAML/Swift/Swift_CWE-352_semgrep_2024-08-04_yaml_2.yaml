@@ -1,0 +1,14 @@
+rules:
+  - id: csrf-detection-alamofire
+    patterns:
+      - pattern: |
+          AF.request($URL, method: .post, parameters: $PARAMS, encoding: JSONEncoding.default)
+      - pattern-either:
+          - pattern-not: |
+              $REQUEST.headers = ["X-CSRF-Token": $TOKEN]
+          - pattern-inside:
+              - pattern: |
+                  .validate(statusCode: 200..<300)
+    message: POST request via Alamofire without CSRF token.
+    severity: WARNING
+    languages: [swift]

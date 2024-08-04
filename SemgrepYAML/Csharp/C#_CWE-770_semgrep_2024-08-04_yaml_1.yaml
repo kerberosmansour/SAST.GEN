@@ -1,0 +1,46 @@
+rules:
+  - id: csharp-cwe-770-unlimited-allocation
+    patterns:
+      - pattern-either:
+        # Detect unbounded allocation of managed resources
+        - pattern: |
+            var $BUFFER = new byte[$SIZE];
+        - pattern: |
+            var $BUFFER = new List<$TYPE>[$SIZE];
+    message: "Potential unbounded allocation without limits or throttling (CWE-770)"
+    severity: WARNING
+    languages: [csharp]
+
+  - id: csharp-cwe-770-unlimited-loop-allocation
+    patterns:
+      # Detect allocations within loops that can lead to unbounded resource allocation
+      - pattern: |
+          for (...) {
+            var $BUFFER = new byte[$SIZE];
+          }
+      - pattern: |
+          foreach (...) {
+            var $BUFFER = new List<$TYPE>[$SIZE];
+          }
+      - pattern: |
+          while (...) {
+            var $BUFFER = new byte[$SIZE];
+          }
+      message: "Allocation within a loop potentially leading to unbounded resource allocation (CWE-770)"
+      severity: WARNING
+      languages: [csharp]
+
+  - id: csharp-cwe-770-unlimiting-endpoint-allocation
+    patterns:
+      # Detect unthrottled endpoint handling requests leading to unbounded resource allocation
+      - pattern: |
+          public IActionResult $METHOD(...) {
+            var $BUFFER = new byte[$SIZE];
+            ...
+            return Ok(...);
+          }
+    message: "Potentially unbounded allocation of resources in an endpoint handler without limits or throttling (CWE-770)"
+    severity: WARNING
+    languages: [csharp]
+    metadata:
+      category: CWE-770

@@ -1,0 +1,11 @@
+rules:
+  - id: csharp-el-injection-aspnet
+    patterns:
+      - pattern-either:
+          - pattern: |
+              <asp:TextBox runat="server" Text='<%# $TEXT %>' ></asp:TextBox>
+          - pattern: |
+              <asp:Label runat="server" Text='<%# $TEXT %>' ></asp:Label>
+    languages: [csharp]
+    severity: ERROR
+    message: "Potential Expression Language Injection detected in ASP.NET control."

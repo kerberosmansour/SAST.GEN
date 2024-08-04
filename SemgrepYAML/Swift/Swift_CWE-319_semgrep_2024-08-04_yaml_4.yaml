@@ -1,0 +1,20 @@
+rules:
+  - id: sensitive-headers-http
+    languages: [swift]
+    message: "Sensitive headers sent over HTTP"
+    severity: ERROR
+    patterns:
+      - pattern: URLRequest(url: URL(string: "$URL")!)
+      - metavariable-pattern:
+          metavariable: $URL
+          patterns:
+            - pattern: |
+                http://
+      - pattern-inside: |
+          request.setValue($VALUE, forHTTPHeaderField: $HEADER)
+      - metavariable-pattern:
+          metavariable: $HEADER
+          patterns:
+            - pattern: Authorization
+            - pattern: ApiKey
+            - pattern: X-Api-Key

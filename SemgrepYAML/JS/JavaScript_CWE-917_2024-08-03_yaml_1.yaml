@@ -1,0 +1,49 @@
+rules:
+  - id: expression-language-injection
+    patterns:
+      - pattern-either:
+          # React
+          - pattern: |
+              function $FUNC(...) {
+                return (
+                  <div dangerouslySetInnerHTML={{__html: $DATA}} />
+                );
+              }
+          # Angular
+          - pattern: |
+              <div [innerHTML]="$DATA"></div>
+          - pattern: |
+              element.innerHTML = $DATA;
+          # Vue.js
+          - pattern: |
+              <div v-html="$DATA"></div>
+      - metavariable-pattern:
+          metavariable: $DATA
+          patterns:
+            - pattern-not: safeHtml($DATA)
+    message: "Improper Neutralization of Special Elements used in an Expression Language Statement, leading to potential Expression Language Injection (CWE-917). Consider sanitizing the input using suitable libraries or methods."
+    languages:
+      - javascript
+      - typescript
+    severity: ERROR
+    metadata:
+      cwe: "CWE-917"
+      owasp: "A1:2017 - Injection"
+      description: "Improper Neutralization of Special Elements used in an Expression Language Statement in various JavaScript frameworks, leading to potential vulnerabilities."
+      references:
+        - "https://cwe.mitre.org/data/definitions/917.html"
+    examples:
+      - code: |
+          // Improper usage example
+          function renderContent(data) {
+            return (
+              <div dangerouslySetInnerHTML={{__html: data}} />
+            );
+          }
+      - code: |
+          // Proper usage example with sanitization
+          function renderContent(data) {
+            return (
+              <div dangerouslySetInnerHTML={{__html: safeHtml(data)}} />
+            );
+          }

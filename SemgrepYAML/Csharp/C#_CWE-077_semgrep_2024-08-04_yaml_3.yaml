@@ -1,0 +1,15 @@
+rules:
+  - id: csharp-process-startinfo-unsafe-argument
+    languages: [csharp]
+    message: Detected potential command injection via ProcessStartInfo.Argument with unchecked user input.
+    severity: ERROR
+    patterns:
+      - pattern: |
+            using System.Diagnostics;
+            ...
+            var startInfo = new ProcessStartInfo();
+            startInfo.Arguments = $UNTRUSTED_INPUT;
+            Process.Start(startInfo);
+      - metavariable-pattern:
+          metavariable: $UNTRUSTED_INPUT
+          pattern-not: $SAFE_INPUT

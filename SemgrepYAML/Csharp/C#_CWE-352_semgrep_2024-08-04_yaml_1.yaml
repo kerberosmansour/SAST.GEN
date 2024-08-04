@@ -1,0 +1,13 @@
+rules:
+  - id: aspnetcore-missing-anti-forgery-token
+    languages: [csharp]
+    message: "Action does not have an anti-forgery token validation, which may lead to CSRF vulnerabilities."
+    patterns:
+      - pattern-inside: |
+          public class $CONTROLLER : Controller
+      - pattern: |
+          public IActionResult $ACTION(...){...}
+      - pattern-not: |
+          [ValidateAntiForgeryToken]
+          public IActionResult $ACTION(...){...}
+    severity: WARNING

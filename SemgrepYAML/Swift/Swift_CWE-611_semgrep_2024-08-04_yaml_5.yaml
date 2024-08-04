@@ -1,0 +1,10 @@
+rules:
+  - id: swift-swxmlhash-vulnerability
+    patterns:
+      - pattern: |
+          let $VAR = SWXMLHash.parse($DATA)
+    message: "SWXMLHash used without disabling external entities, investigate for CWE-611"
+    languages: [swift]
+    severity: WARNING
+    metadata:
+      cwe: CWE-611

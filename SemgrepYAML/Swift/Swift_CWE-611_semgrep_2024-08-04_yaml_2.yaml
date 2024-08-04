@@ -1,0 +1,12 @@
+rules:
+  - id: swift-nosir-classes
+    patterns:
+      - pattern: |
+          let $VAR = XMLParser(contentsOf: URL(string: $URL)!)
+        - pattern: |
+            xmlParser.shouldResolveExternalEntities = true
+    message: "Potential CWE-611: Found XML parsing with external entity resolution enabled"
+    languages: [swift]
+    severity: ERROR
+    metadata:
+      cwe: CWE-611

@@ -1,0 +1,8 @@
+rules:
+  - id: js-eval-deserialization
+    languages: [javascript]
+    message: "Deserialization of untrusted data using eval can lead to Remote Code Execution."
+    severity: ERROR
+    patterns:
+      - pattern: |
+          eval($UNTRUSTED_INPUT)

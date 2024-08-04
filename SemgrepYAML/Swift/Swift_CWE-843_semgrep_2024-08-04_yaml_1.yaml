@@ -1,0 +1,54 @@
+rules:
+  - id: swift-type-confusion
+    patterns:
+      - pattern-either:
+        # Unsafe type cast patterns
+        - pattern: |
+            let $VAR: $TYPE_A = ...
+            ...
+            let $VAR2 = $VAR as! $TYPE_B
+        - pattern: |
+            let $VAR = ...
+            ...
+            if let $VAR2 = $VAR as? $TYPE_B { ... }
+      - metavariable-pattern:
+          metavariable: $TYPE_B
+          pattern-not: $TYPE_A
+    languages: [swift]
+    severity: ERROR
+    message: "Potential type confusion detected between $TYPE_A and $TYPE_B"
+    metadata:
+      cwe: "CWE-843"
+    url: "https://cwe.mitre.org/data/definitions/843.html"
+
+  - id: swift-type-confusion-array
+    patterns:
+      - pattern: |
+          let $VAR: [$TYPE_A] = ...
+          ...
+          let $VAR2 = $VAR as! [$TYPE_B]
+      - metavariable-pattern:
+          metavariable: $TYPE_B
+          pattern-not: $TYPE_A
+    languages: [swift]
+    severity: ERROR
+    message: "Potential type confusion detected between array types $TYPE_A and $TYPE_B"
+    metadata:
+      cwe: "CWE-843"
+    url: "https://cwe.mitre.org/data/definitions/843.html"
+
+  - id: swift-type-confusion-dictionary
+    patterns:
+      - pattern: |
+          let $VAR: [$KEY: $TYPE_A] = ...
+          ...
+          let $VAR2 = $VAR as! [$KEY: $TYPE_B]
+      - metavariable-pattern:
+          metavariable: $TYPE_B
+          pattern-not: $TYPE_A
+    languages: [swift]
+    severity: ERROR
+    message: "Potential type confusion detected between dictionary types $TYPE_A and $TYPE_B"
+    metadata:
+      cwe: "CWE-843"
+    url: "https://cwe.mitre.org/data/definitions/843.html"

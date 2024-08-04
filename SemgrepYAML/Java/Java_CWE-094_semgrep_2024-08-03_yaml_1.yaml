@@ -1,0 +1,58 @@
+rules:
+  - id: java-code-injection
+    languages: [java]
+    message: "Improper Control of Generation of Code ('Code Injection') (CWE-094)"
+    severity: ERROR
+    patterns:
+      # Detect runtime JavaScript code execution
+      - pattern: |
+          $METHOD.invoke($OBJ, $ARGS)
+          ...
+          $VAR.executeScript($CODE)
+      # Specifically targetting Reflection API misuse
+      - pattern: |
+          $METHOD.invoke($OBJ, new Object[] { (Object[]) $CODE })
+      # Detect usage of potentially dangerous methods in popular frameworks
+      - pattern: |
+          $HTTP_SERVLET_REQUEST.getParameter($PARAM)
+          ...
+          $VAR.execute($CODE)
+      # Use ellipsis to cover different forms of the attack vector
+      - pattern-inside: |
+          {
+            ...
+            $METHOD.invoke($OBJ, $ARGS)
+            ...
+          }
+      - pattern-inside: |
+          {
+            ...
+            $VAR.executeScript($CODE)
+            ...
+          }
+      - pattern-inside: |
+          {
+            ...
+            $VAR.execute($CODE)
+            ...
+          }
+    metadata:
+      cwe: "CWE-094"
+      owasp: "A1:2019-Injection"
+      source: "https://example.com/my-custom-semgrep-rule"
+    fix: |
+      // Use vetted libraries or frameworks; avoid using Reflection or dynamic code execution.
+      // Example fix: validate and sanitize all inputs appropriately.
+      public class SafeCodeExecution {
+          public void safeExecute(String code) {
+              // Allow only specific inputs after validating them
+              if (isValid(code)) {
+                  // Safe code execution
+              }
+          }
+
+          private boolean isValid(String code) {
+              // Implement validation logic
+              return true; // Replace with actual validation
+          }
+      }

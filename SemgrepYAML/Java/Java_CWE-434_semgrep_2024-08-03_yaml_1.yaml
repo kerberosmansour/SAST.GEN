@@ -1,0 +1,31 @@
+rules:
+- id: java-cwe-434-unrestricted-file-upload
+  patterns:
+    - pattern-either:
+        - pattern: |
+            @RequestMapping(...)
+            @ResponseBody
+            public $RET $FUNC(HttpServletRequest $REQ, HttpServletResponse $RESP) {
+                ...
+                $FILE = $REQ.getFile(...);
+                ...
+                $FILE.transferTo(...);
+                ...
+            }
+        - pattern: |
+            public class $CLASS {
+                public void doPost(HttpServletRequest $REQ, HttpServletResponse $RES) throws ServletException, IOException {
+                    ...
+                    Part $PART = $REQ.getPart(...);
+                    ...
+                    $PART.write(...);
+                    ...
+                }
+            }
+  message: "Potential CWE-434: Unrestricted file upload detected."
+  severity: ERROR
+  languages:
+    - java
+  metadata:
+    cwe: "CWE-434"
+    description: "Unrestricted Upload of File with Dangerous Type (CWE-434)."

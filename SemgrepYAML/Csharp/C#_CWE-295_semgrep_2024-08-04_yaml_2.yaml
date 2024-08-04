@@ -1,0 +1,14 @@
+rules:
+  - id: httpclienthandler-validation
+    languages:
+      - csharp
+    message: Improper Certificate Validation via HttpClientHandler.ServerCertificateCustomValidationCallback
+    severity: ERROR
+    patterns:
+      - pattern: |
+          var $H = new HttpClientHandler();
+          $H.ServerCertificateCustomValidationCallback = (message, cert, chain, sslPolicyErrors) => true;
+      - pattern: |
+          var $H = new HttpClientHandler {
+              ServerCertificateCustomValidationCallback = (message, cert, chain, sslPolicyErrors) => true
+          };

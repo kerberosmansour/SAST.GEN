@@ -1,0 +1,15 @@
+rules:
+  - id: js-sqlinjection-raw-sql
+    patterns:
+      - pattern: connection.query($QUERY, ...)
+      - pattern: client.query($QUERY, ...)
+      - metavariable-pattern:
+          metavariable: $QUERY
+          patterns:
+            - pattern-not: '... ? ...'
+    languages: [javascript]
+    message: "Possible SQL Injection vulnerability."
+    severity: ERROR
+    metadata:
+      cwe: CWE-089
+      owasp: A1:2017-Injection

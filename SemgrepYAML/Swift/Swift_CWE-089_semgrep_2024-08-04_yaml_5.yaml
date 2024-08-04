@@ -1,0 +1,14 @@
+rules:
+  - id: swift-sql-injection-dynamic-construction
+    languages: [swift]
+    message: "Potential SQL Injection in dynamic query construction"
+    severity: WARNING
+    patterns:
+      - pattern: |
+          let $query_part = "$PART1" + $UNTRUSTED_INPUT + "$PART2"
+      - pattern-inside: |
+          executeQuery($query_part)
+    metadata:
+      cwe: "CWE-89"
+      owasp: "A1: Injection"
+      reference: "https://semgrep.dev/docs/writing-rules/overview/"

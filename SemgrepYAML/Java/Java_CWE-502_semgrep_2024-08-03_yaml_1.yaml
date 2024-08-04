@@ -1,0 +1,60 @@
+rules:
+  - id: deserialization-of-untrusted-data
+    languages: [java]
+    message: "Potential deserialization of untrusted data. Avoid deserializing data from untrusted sources to prevent security vulnerabilities."
+    severity: ERROR
+    patterns:
+      - pattern: |
+          ObjectInputStream ois = new ObjectInputStream($INPUT);
+          $OBJECT = ($CAST) ois.readObject();
+      - metavariable-pattern:
+          metavariable: $INPUT
+          patterns:
+            - pattern-either:
+                - pattern: SocketInputStream
+                - pattern: ServletInputStream
+                - pattern: FileInputStream
+                - pattern: ByteArrayInputStream
+    metadata:
+      cwe: "CWE-502"
+      owasp: "A8:2017-Insecure Deserialization"
+    examples:
+      - code: |
+          import java.io.FileInputStream;
+          import java.io.ObjectInputStream;
+          
+          public class Main {
+              public static void main(String[] args) {
+                  try {
+                      FileInputStream fileIn = new FileInputStream("data.ser");
+                      ObjectInputStream in = new ObjectInputStream(fileIn);
+                      Object obj = in.readObject();
+                      in.close();
+                      fileIn.close();
+                  } catch (Exception e) {
+                      e.printStackTrace();
+                  }
+              }
+          }
+        message: "Avoid deserialization of untrusted data using FileInputStream"
+        result: ERROR
+      - code: |
+          import java.io.ByteArrayInputStream;
+          import java.io.ObjectInputStream;
+          
+          public class Main {
+              public static void main(String[] args) {
+                  try {
+                      byte[] data = "some data".getBytes();
+                      ByteArrayInputStream byteIn = new ByteArrayInputStream(data);
+                      ObjectInputStream in = new ObjectInputStream(byteIn);
+                      Object obj = in.readObject();
+                      in.close();
+                      byteIn.close();
+                  } catch (Exception e) {
+                      e.printStackTrace();
+                  }
+              }
+          }
+        message: "Avoid deserialization of untrusted data using ByteArrayInputStream"
+        result: ERROR

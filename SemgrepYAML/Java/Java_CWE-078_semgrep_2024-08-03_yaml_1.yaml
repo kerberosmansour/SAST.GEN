@@ -1,0 +1,38 @@
+rules:
+  - id: java-os-command-injection
+    patterns:
+      - pattern-either:
+        # Detects common exec methods in Java
+        - pattern: |
+            Process $P = Runtime.getRuntime().exec($CMD);
+        - pattern: |
+            Process $P = $INSTANCE.exec($CMD);
+        - pattern: |
+            $PROCESS_BUILDER = new ProcessBuilder($ARGS...);
+    message: "Possible OS command injection detected. Ensure that $CMD or $ARGS is properly sanitized."
+    severity: ERROR
+    languages: [java]
+    metadata:
+      cwe: "CWE-078"
+      references:
+        - "https://cwe.mitre.org/data/definitions/78.html"
+      # Describing variations in popular frameworks
+      frameworks:
+        - name: "Spring"
+          description: "Spring applications might include methods where user input is passed directly to exec or ProcessBuilder without validation."
+        - name: "Struts"
+          description: "Struts applications often use similar patterns with ProcessBuilder or Runtime.getRuntime()."
+    examples:
+      - code: |
+          import java.io.IOException;
+
+          public class Example {
+              public void vulnerableMethod(String userInput) throws IOException {
+                  String[] cmd = {"/bin/sh", "-c", userInput};
+                  ProcessBuilder pb = new ProcessBuilder(cmd);
+                  pb.start();
+              }
+          }
+        message: "Detected code triggering OS Command Injection."
+        severity: ERROR
+        # Adjust the pattern to match more specific cases in different scenarios

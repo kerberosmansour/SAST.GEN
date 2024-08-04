@@ -1,0 +1,16 @@
+rules:
+  - id: csharp-cleartext-http-connection
+    patterns:
+      - pattern: $V = new HttpClient()
+      - pattern-either:
+          - pattern: |
+              $V.BaseAddress = "http://$URL"
+          - pattern: |
+              $V.DefaultRequestHeaders.Add("http://$URL", ...)
+      - pattern-not: |
+              $V.BaseAddress = "https://$URL"
+      - pattern-not: |
+              $V.DefaultRequestHeaders.Add("https://$URL", ...)
+    message: "Found potentially insecure cleartext HTTP connection."
+    severity: WARNING
+    languages: [csharp]

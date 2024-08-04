@@ -1,0 +1,20 @@
+rules:
+  - id: unrestricted-upload-of-file
+    languages: [javascript]
+    message: "Unrestricted Upload of File with Dangerous Type (CWE-434)"
+    severity: ERROR
+    pattern: | 
+      const $VAR = req.files.$FILE;
+      ...
+      $VAR.mv(...);
+    metadata:
+      cwe: "CWE-434"
+    examples:
+      - code: |
+          const file = req.files.uploadedFile;
+          file.mv('/uploads/' + file.name);
+        not-apply: true
+      - code: |
+          const secureFile = req.files.secureUpload;
+          secureFile.mv('/uploads/' + secureFile.name);
+        apply: true

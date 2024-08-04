@@ -1,0 +1,23 @@
+rules:
+  - id: csharp-httpclient-insecure-get-post
+    patterns:
+      - pattern: |
+          var $CLIENT = new HttpClient();
+          var $RESPONSE = $CLIENT.GetAsync("http://$URL");
+      - pattern-not: |
+          var $CLIENT = new HttpClient();
+          var $RESPONSE = $CLIENT.GetAsync("https://$URL");
+    message: "Found potentially insecure HTTP GET request."
+    severity: WARNING
+    languages: [csharp]
+  - id: csharp-httpclient-insecure-get-post
+    patterns:
+      - pattern: |
+          var $CLIENT = new HttpClient();
+          var $RESPONSE = $CLIENT.PostAsync("http://$URL", ... );
+      - pattern-not: |
+          var $CLIENT = new HttpClient();
+          var $RESPONSE = $CLIENT.PostAsync("https://$URL", ... );
+    message: "Found potentially insecure HTTP POST request."
+    severity: WARNING
+    languages: [csharp]

@@ -1,0 +1,20 @@
+rules:
+  - id: spring-disable-csrf
+    patterns:
+      - pattern-inside: |
+          @Configuration
+          @EnableWebSecurity
+          public class $CLASS_NAME extends WebSecurityConfigurerAdapter {
+            @Override
+            protected void configure(HttpSecurity http) throws Exception {
+              ...
+              $DISABLE_CSRF_CALL
+              ...
+            }
+      - metavariable-pattern:
+          metavariable: $DISABLE_CSRF_CALL
+          pattern: |
+            http.csrf().disable()
+    message: "CSRF protection is disabled in the Web Security configuration."
+    languages: [java]
+    severity: WARNING

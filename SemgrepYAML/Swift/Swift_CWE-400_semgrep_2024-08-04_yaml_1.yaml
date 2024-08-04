@@ -1,0 +1,16 @@
+rules:
+  - id: swift-unbounded-loop
+    languages: [swift]
+    message: "Unbounded loop detected which may cause uncontrolled resource consumption (CWE-400)"
+    severity: WARNING
+    patterns:
+      - pattern-inside: |
+          while ...
+            ...
+      - metavariable-pattern:
+          metavariable: $LOOP_CONDITION
+          patterns:
+            - pattern-not: |
+                $LOOP_CONDITION <= ...
+            - pattern-not: |
+                $LOOP_CONDITION < ...

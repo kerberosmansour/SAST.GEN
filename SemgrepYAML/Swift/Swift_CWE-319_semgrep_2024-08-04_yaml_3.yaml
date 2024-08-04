@@ -1,0 +1,10 @@
+rules:
+  - id: cleartext-websocket
+    languages: [swift]
+    message: "Sensitive data transmitted over an unencrypted WebSocket connection"
+    severity: ERROR
+    patterns:
+      - pattern: URL(string: "$URL")
+      - metavariable-comparison:
+          metavariable: $URL
+          comparison: $URL.startswith("ws:")

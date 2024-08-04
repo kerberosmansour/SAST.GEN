@@ -1,0 +1,23 @@
+rules:
+  - id: java-type-confusion
+    patterns:
+      - pattern: |
+          @Autowired
+          private $TYPE1 $VAR;
+      - pattern: |
+          $TYPE1 $VAR = ($TYPE2) $EXPR;
+          ...
+          @Autowired
+          private $TYPE1 someBean;
+      - metavariable-pattern:
+          metavariable: $TYPE1
+          pattern-not: $TYPE2
+    message: "Potential Type Confusion: $VAR is cast from $TYPE2 to $TYPE1."
+    languages:
+      - java
+    severity: WARNING
+    metadata:
+      cwe: "CWE-843"
+      description: "Detects potential type confusion by identifying variable assignments where a type cast leads to an incompatible type."
+      references:
+        - "https://cwe.mitre.org/data/definitions/843.html"

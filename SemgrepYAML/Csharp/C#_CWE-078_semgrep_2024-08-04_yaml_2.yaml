@@ -1,0 +1,22 @@
+rules:
+  - id: csharp-os-command-injection-bash-cmd
+    languages: [csharp]
+    message: "Potential OS Command Injection via shell detected"
+    severity: ERROR
+    patterns:
+      - pattern: |
+          Process.Start("cmd.exe", "/C " + $COMMAND)
+          where any(
+            $COMMAND == $INJECTABLE_VAR + ...
+            $COMMAND == $USER_INPUT
+          )
+      - pattern: |
+          Process.Start("bash", "-c " + $COMMAND)
+          where any(
+            $COMMAND == $INJECTABLE_VAR + ...
+            $COMMAND == $USER_INPUT
+          )
+    metadata:
+      cwe: CWE-078
+      owasp: A1: Injection
+    fix: "Validate user inputs and avoid direct usage of user-controlled variables in OS commands."

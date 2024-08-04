@@ -1,0 +1,13 @@
+rules:
+- id: csharp-sql-injection-raw-query
+  patterns:
+    - pattern: "new SqlCommand($QUERY, $CONN)"
+    - metavariable-pattern:
+        metavariable: $QUERY
+        pattern-not: "string"
+  message: "Possible SQL Injection vulnerability: avoid using raw SQL queries."
+  severity: ERROR
+  languages: [csharp]
+  metadata:
+    cwe: "CWE-089"
+    owasp: "A1: Injection"

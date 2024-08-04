@@ -1,0 +1,34 @@
+rules:
+  - id: detect-command-injection
+    languages: [javascript]
+    message: Potential Command Injection vulnerability detected
+    severity: ERROR
+    patterns:
+      - pattern: exec(`$COMMAND`, ...)
+      - pattern: execSync(`$COMMAND`, ...)
+      - pattern-either:
+          - pattern: >-
+              require('child_process').exec(`$COMMAND`, ...)
+          - pattern: >-
+              require('child_process').execSync(`$COMMAND`, ...)
+          - pattern: >-
+              const { exec } = require('child_process');
+              exec(`$COMMAND`, ...)
+          - pattern: >-
+              const { execSync } = require('child_process');
+              execSync(`$COMMAND`, ...)
+      - metavariable-pattern:
+          metavariable: $COMMAND
+            pattern-inside:
+              - pattern: $SOME_VAR + ...
+              - pattern: replace($...)
+              - pattern: concatenate($...)
+              - pattern: process.env.$VAR
+              - pattern: new Function(...)
+    metadata:
+      category: Command Injection
+      technology: JavaScript
+      cwe: "CWE-77"
+    description: |
+      This rule detects patterns related to possible command injection vulnerabilities. 
+      Command Injection can allow an attacker to execute arbitrary commands on the host operating system.

@@ -1,0 +1,6 @@
+- pattern: HttpContext.Current.Request[$ANY]
+     - pattern: Request.QueryString[$ANY]
+     - pattern: Request.Form[$ANY]
+     - pattern: Request.Params[$ANY]
+     - pattern: Request[$ANY]
+     - pattern: Request.Headers[$ANY]

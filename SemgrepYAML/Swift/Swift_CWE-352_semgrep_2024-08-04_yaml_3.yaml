@@ -1,0 +1,18 @@
+rules:
+  - id: csrf-detection-custom
+    patterns:
+      - pattern: |
+          let $VAR = URLRequest(url: $URL)
+      - pattern-not: |
+          $VAR.setValue("X-CSRF-Token", forHTTPHeaderField: "X-CSRF-Token")
+      - metavariable-pattern:
+          metavariable: $VAR
+          patterns:
+            - pattern-either:
+                - pattern: |
+                    $VAR.httpMethod = "POST"
+                - pattern: |
+                    $VAR.httpMethod = "PUT"
+    message: Custom URLRequest without CSRF token.
+    severity: WARNING
+    languages: [swift]

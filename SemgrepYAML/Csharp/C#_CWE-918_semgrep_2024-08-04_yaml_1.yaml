@@ -1,0 +1,12 @@
+rules:
+  - id: csharp-webclient-downloadstring
+    patterns:
+      - pattern: |
+          string $URL = $USER_INPUT;
+          $WEBCLIENT = new WebClient();
+          $WEBCLIENT.DownloadString($URL);
+    message: "Potential SSRF vulnerability: WebClient.DownloadString can be exploited if $URL is user-controlled."
+    languages: [csharp]
+    severity: WARNING
+    metadata:
+      cwe: "CWE-918: Server-Side Request Forgery (SSRF)"

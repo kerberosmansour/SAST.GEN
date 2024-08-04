@@ -1,0 +1,32 @@
+rules:
+  - id: uncontrolled-search-path-element
+    patterns:
+      - pattern-either:
+          - pattern: |
+              process.env.PATH = $INSECURE_PATH
+          - pattern: |
+              $VARIABLE.env.PATH = $INSECURE_PATH
+          - pattern: |
+              process.env['PATH'] = $INSECURE_PATH
+          - pattern: |
+              $VARIABLE.env['PATH'] = $INSECURE_PATH
+      - pattern-inside: |
+          function $FUNC(...) {
+            ...
+          }
+      - metavariable-regex:
+          metavariable: $INSECURE_PATH
+          regex: (http:\/\/|https:\/\/|ftp:\/\/|smb:\/\/|file:\/\/|\.\.\/|\/)
+    message: >
+      Do not use untrusted paths in the system PATH environment variable to avoid
+      uncontrolled search path elements. Ensure the path is validated.
+    languages:
+      - javascript
+    severity: ERROR
+    metadata:
+      cwe: "CWE-427"
+      owasp: "A9:2021"
+      category: "vulnerability"
+      references:
+        - "https://cwe.mitre.org/data/definitions/427.html"
+        - "https://owasp.org/www-project-samm/1.1/en/A9-Using-Components-with-Known-Vulnerabilities"

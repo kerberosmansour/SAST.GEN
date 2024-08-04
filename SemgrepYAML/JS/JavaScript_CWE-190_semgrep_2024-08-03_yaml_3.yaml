@@ -1,0 +1,21 @@
+rules:
+  - id: javascript-builtin-integer-overflow
+    languages: [javascript]
+    message: "Potential integer overflow or wraparound using JavaScript built-in number functions."
+    severity: WARNING
+    patterns:
+      - pattern-either:
+        - pattern: Math.pow($BASE, $EXP)
+        - pattern: parseInt($STRING)
+    metavariable-pattern:
+      metavariable: $BASE
+      comparison: $BASE > Number.MAX_SAFE_INTEGER
+      message: "Base value in Math.pow might cause overflow."
+    metavariable-pattern:
+      metavariable: $EXP
+      comparison: $EXP > Number.MAX_SAFE_INTEGER
+      message: "Exponent value in Math.pow might cause overflow."
+    metavariable-pattern:
+      metavariable: $STRING
+      comparison: parseInt($STRING) > Number.MAX_SAFE_INTEGER
+      message: "Parsed integer value might cause overflow."

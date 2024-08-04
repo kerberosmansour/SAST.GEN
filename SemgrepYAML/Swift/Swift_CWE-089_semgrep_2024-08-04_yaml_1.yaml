@@ -1,0 +1,16 @@
+rules:
+  - id: swift-sql-injection-raw-query
+    languages: [swift]
+    message: "Potential SQL Injection in raw query execution"
+    severity: WARNING
+    patterns:
+      - pattern: |
+          let $query = "$SQL_QUERY"
+      - metavariable-pattern:
+          metavariable: $SQL_QUERY
+          patterns:
+            - pattern: ...$UNTRUSTED_INPUT...
+    metadata:
+      cwe: "CWE-89"
+      owasp: "A1: Injection"
+      reference: "https://semgrep.dev/docs/writing-rules/overview/"

@@ -1,0 +1,46 @@
+rules:
+  - id: csharp-xml-xxe
+    patterns:
+      - pattern: |
+          var xmlReader = XmlReader.Create(...);
+      - pattern-not-inside: |
+          var settings = new XmlReaderSettings
+          {
+              DtdProcessing = DtdProcessing.Prohibit
+          };
+    message: "XML External Entities (XXE) detected. Ensure DTD processing is disabled."
+    languages: [csharp]
+    severity: ERROR
+    metadata:
+      cwe: CWE-611
+      owasp: A4:XXE
+  - id: csharp-xml-document-xxe
+    patterns:
+      - pattern: |
+          var xmlDoc = new XmlDocument();
+          $XML.Load(...);
+      - pattern-not-inside: |
+          $XML.XmlResolver = null;
+    message: "XML External Entities (XXE) detected. Ensure XmlResolver is set to null."
+    languages: [csharp]
+    severity: ERROR
+    metadata:
+      cwe: CWE-611
+      owasp: A4:XXE
+  - id: csharp-linq-xml-xxe
+    patterns:
+      - pattern: |
+          var xml = XDocument.Load(...);
+      - pattern-not-inside: |
+          var settings = new XmlReaderSettings
+          {
+              DtdProcessing = DtdProcessing.Prohibit
+          };
+          var reader = XmlReader.Create(..., settings);
+          var xml = XDocument.Load(reader);
+    message: "XML External Entities (XXE) detected. Use XmlReader with DtdProcessing set to Prohibit."
+    languages: [csharp]
+    severity: ERROR
+    metadata:
+      cwe: CWE-611
+      owasp: A4:XXE

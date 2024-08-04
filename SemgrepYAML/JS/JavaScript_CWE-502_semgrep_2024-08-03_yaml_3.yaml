@@ -1,0 +1,8 @@
+rules:
+  - id: angular-httpclient-json-deserialization
+    languages: [javascript, typescript]
+    message: "Deserialization of untrusted data using Angular HttpClient with responseType as 'json' can be risky."
+    severity: WARNING
+    patterns:
+      - pattern: |
+          this.httpClient.get($URL, { responseType: 'json' })

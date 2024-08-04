@@ -1,0 +1,21 @@
+rules:
+  - id: xml2js-external-entity-disabled
+    languages: [javascript]
+    message: Use `xml2js` without disabling external entity resolution can lead to XXE vulnerability.
+    severity: ERROR
+    patterns:
+      - pattern: |
+            new xml2js.Parser(...)
+      - pattern-inside: |
+            new xml2js.Parser({ ... })
+      - metavariable-comparison:
+          metavariable: $CONFIG
+          comparison: $CONFIG['explicitRoot'] == false
+  - id: xml2js-external-entity-not-set
+    languages: [javascript]
+    message: Ensure `xml2js` external entity resolution is disabled to prevent XXE vulnerability.
+    severity: WARNING
+    pattern: |
+        new xml2js.Parser({...})
+    pattern-not-inside: |
+        'explicitRoot': false

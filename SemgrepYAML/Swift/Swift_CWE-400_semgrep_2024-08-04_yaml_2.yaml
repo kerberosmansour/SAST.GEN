@@ -1,0 +1,17 @@
+rules:
+  - id: swift-unbounded-recursion
+    languages: [swift]
+    message: "Unbounded recursion detected which may cause uncontrolled resource consumption (CWE-400)"
+    severity: WARNING
+    patterns:
+      - pattern: |
+          func $FUNC(...) {
+              ...
+              $FUNC(...)
+              ...
+          }
+      - metavariable-pattern:
+          metavariable: $FUNC
+          patterns:
+            - pattern-not: |
+                ...

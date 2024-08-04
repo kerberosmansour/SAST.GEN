@@ -1,0 +1,28 @@
+rules:
+  - id: detect-code-injection
+    patterns:
+      - pattern-either:
+          - pattern: |
+              eval($CODE)
+          - pattern: |
+              setTimeout($CODE, ...)
+          - pattern: |
+              setInterval($CODE, ...)
+          - pattern: |
+              new Function($ARGS, $CODE)
+          - pattern: |
+              document.write($CODE)
+    message: "Potential code injection vulnerability detected in evaluating or executing code. Avoid using eval(), setTimeout(), setInterval(), new Function(), or document.write() with dynamic code to prevent code injection risks."
+    languages: [javascript]
+    severity: ERROR
+    metadata:
+      cwe: "CWE-94"
+      confidence: "HIGH"
+      likelihood: "HIGH"
+      impact: "HIGH"
+      subcategory: "vuln"
+    path_patterns:
+      - "**/*.js"
+      - "**/*.jsx"
+      - "**/*.ts"
+      - "**/*.tsx"

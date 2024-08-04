@@ -1,0 +1,24 @@
+rules:
+  - id: uncontrolled-search-path-element
+    languages: [csharp]
+    message: "Detected uncontrolled search path element (CWE-427). Ensure that search paths are securely handled."
+    severity: WARNING
+    patterns:
+      # Checking if any command injection vulnerable system commands are being used
+      - pattern: |
+          Environment.SetEnvironmentVariable("PATH", $NEW_PATH)
+      - pattern-either:
+          # Check for concatenation with untrusted input
+          - pattern: $NEW_PATH + ...
+          - pattern: ... + $NEW_PATH
+      - pattern-either:
+          # Check if the new path is built using untrusted sources
+          - pattern: Environment.GetEnvironmentVariable(...)
+          - pattern: ConfigurationManager.AppSettings[...]
+
+    # Adding paths to narrow checks if needed
+    paths:
+      include:
+        - "**/*.cs"
+      exclude:
+        - "test/**"

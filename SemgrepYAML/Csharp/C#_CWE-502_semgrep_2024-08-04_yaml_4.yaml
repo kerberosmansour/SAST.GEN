@@ -1,0 +1,15 @@
+rules:
+  - id: csharp-datacontractserializer-deserialization
+    languages: [csharp]
+    message: "Deserialization using DataContractSerializer of potentially untrusted data (CWE-502)"
+    severity: ERROR
+    patterns:
+      - pattern: |
+          var $DESERIALIZER = new DataContractSerializer();
+          $DESERIALIZER.ReadObject($STREAM);
+      - pattern: |
+          DataContractSerializer $DESERIALIZER = new DataContractSerializer();
+          $DESERIALIZER.ReadObject($STREAM);
+    metadata:
+      impact: "high"
+      confidence: "high"

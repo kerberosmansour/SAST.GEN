@@ -1,0 +1,22 @@
+rules:
+  - id: path-traversal-http
+    patterns:
+      - pattern: |
+          http.get(req.params[$PARAM], ($, res) => {
+            $FS_METHOD($, req.params[$PARAM], function(err, data) {...})
+          })
+      - metavariable-pattern:
+          metavariable: $FS_METHOD
+          patterns:
+            - pattern: |
+                fs.readFile
+            - pattern: |
+                fs.readFileSync
+            - pattern: |
+                fs.open
+    message: "HTTPRequest handlers with user-controlled paths can lead to Path Traversal"
+    severity: ERROR
+    languages:
+      - javascript
+    metadata:
+      cwe: "CWE-22"

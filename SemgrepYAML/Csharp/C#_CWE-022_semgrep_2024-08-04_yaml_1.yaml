@@ -1,0 +1,87 @@
+rules:
+  - id: csharp-path-traversal
+    patterns:
+      - pattern-either:
+        - pattern: |
+            var $PATH = ...;
+            ...
+            $FUNC.ReadAllText($PATH, ...);
+        - pattern: |
+            var $PATH = ...;
+            ...
+            $FUNC.Read($PATH, ...);
+        - pattern: |
+            var $PATH = ...;
+            ...
+            $FUNC.WriteAllText($PATH, ...);
+        - pattern: |
+            var $PATH = ...;
+            ...
+            $FUNC.Create($PATH, ...);
+        - pattern: |
+            var $PATH = ...;
+            ...
+            $FUNC.Open($PATH, ...);
+    severity: ERROR
+    message: "Possible Path Traversal vulnerability: $FUNC($PATH)"
+    languages:
+      - csharp
+    metadata:
+      category: security
+      technology: dotnet
+
+  - id: csharp-path-traversal-unsafe-http
+    patterns:
+      - pattern: |
+            var $PATH = ...;
+            ...
+            $PATH = $REQUEST.Form["..."];
+            ...
+            $FUNC.ReadAllText($PATH, ...);
+        - pattern: |
+            var $PATH = ...;
+            ...
+            $PATH = $REQUEST.QueryString["..."];
+            ...
+            $FUNC.WriteAllText($PATH, ...)
+        - pattern: |
+            var $PATH = ...;
+            ...
+            $PATH = $REQUEST.Params["..."];
+            ...
+            $FUNC.Create($PATH, ...);
+        - pattern: |
+            var $PATH = ...;
+            ...
+            $PATH = $REQUEST.Headers["..."];
+            ...
+            $FUNC.Open($PATH, ...);
+    severity: ERROR
+    message: "Possible Path Traversal vulnerability due to unsafe user input: $FUNC($PATH)"
+    languages:
+      - csharp
+    metadata:
+      category: security
+      technology: dotnet
+
+  - id: csharp-path-traversal-mvc
+    patterns:
+      - pattern: |
+            var $FILE_PATH = ...;
+            ...
+            Path.GetFullPath($FILE_PATH);
+            ...
+            $FUNC.ReadAllText($FILE_PATH, ...);
+        - pattern: |
+            var $FILE_PATH = ...;
+            ...
+            Path.Combine(..., $FILE_PATH);
+            ...
+            $FUNC.WriteAllText($FILE_PATH, ...)
+    severity: ERROR
+    message: "Potential Path Traversal vulnerability in MVC: $FUNC($FILE_PATH)"
+    languages:
+      - csharp
+    metadata:
+      category: security
+      technology: dotnet

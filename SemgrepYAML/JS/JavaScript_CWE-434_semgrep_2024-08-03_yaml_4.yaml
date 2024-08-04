@@ -1,0 +1,53 @@
+rules:
+  - id: multer-unrestricted-file-upload
+    languages: [javascript]
+    message: "Unrestricted Upload with Multer (CWE-434)"
+    severity: ERROR
+    pattern: |
+      const upload = multer({
+        storage: multer.diskStorage({
+          destination: (req, file, cb) => {
+            cb(null, 'uploads/')
+          },
+          filename: (req, file, cb) => {
+            cb(null, file.originalname)
+          }
+        }),
+        fileFilter: (req, file, cb) => {
+          ...
+        }
+      });
+    metadata:
+      cwe: "CWE-434"
+    examples:
+      - code: |
+          const upload = multer({
+            storage: multer.diskStorage({
+              destination: (req, file, cb) => {
+                cb(null, 'uploads/')
+              },
+              filename: (req, file, cb) => {
+                cb(null, file.originalname)
+              }
+            })
+          });
+        not-apply: true
+      - code: |
+          const upload = multer({
+            storage: multer.diskStorage({
+              destination: (req, file, cb) => {
+                cb(null, 'secure_uploads/')
+              },
+              filename: (req, file, cb) => {
+                cb(null, file.originalname)
+              }
+            }),
+            fileFilter: (req, file, cb) => {
+              if (!file.mimetype.startsWith('image/')) {
+                cb(null, false);
+              } else {
+                cb(null, true);
+              }
+            }
+          });
+        apply: true

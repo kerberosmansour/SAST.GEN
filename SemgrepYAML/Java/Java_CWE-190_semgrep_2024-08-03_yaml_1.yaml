@@ -1,0 +1,15 @@
+rules:
+  - id: java-integer-overflow
+    languages: [java]
+    message: "Potential integer overflow detected"
+    severity: ERROR
+    patterns:
+      - pattern: |
+          $VAR = $X + $Y
+      - pattern: |
+          $VAR = $X - $Y
+      - pattern: |
+          $VAR = $X * $Y
+      - metavariable-comparison:
+          metavariable: $Y
+          comparison: $Y > 0 || $Y < 0

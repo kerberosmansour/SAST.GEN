@@ -1,0 +1,11 @@
+rules:
+  - id: int-overflow-addition
+    languages: [csharp]
+    message: "Potential integer overflow in addition operation"
+    severity: ERROR
+    patterns:
+      - pattern: |
+          int $X = $Y + $Z
+      - metavariable-pattern:
+          metavariable: $Y
+          comparison: $Y + $Z < $Y

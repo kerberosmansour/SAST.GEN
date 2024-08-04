@@ -1,0 +1,16 @@
+rules:
+  - id: unthrottled-api-calls
+    languages: [javascript]
+    message: "Unthrottled API calls can lead to denial of service."
+    severity: WARNING
+    pattern: |
+      function $FUNC(...) {
+        ...
+        setInterval(() => {
+          $API_CALL(...)
+        }, $DELAY);
+        ...
+      }
+    metadata:
+      cwe: "CWE-770"
+      owasp: "A6: Security Misconfiguration"

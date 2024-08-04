@@ -1,0 +1,49 @@
+rules:
+- id: os-command-injection
+  languages: [javascript]
+  message: "Potential OS Command Injection detected"
+  severity: ERROR
+  pattern-either:
+    - pattern: exec($INJ)
+    - pattern: execSync($INJ)
+    - pattern: require('child_process').exec($INJ)
+    - pattern: require('child_process').execSync($INJ)
+  metavariables:
+    INJ: $INJ
+  patterns:
+    - pattern-inside: |
+        function (...) {
+          ...
+          $INJ
+          ...
+        }
+  metadata:
+    cwe: "CWE-078"
+    references:
+      - "https://cwe.mitre.org/data/definitions/78.html"
+    
+- id: unsafe-spawn
+  languages: [javascript]
+  message: "Use of child_process.spawn or child_process.spawnSync with unvalidated input"
+  severity: ERROR
+  pattern-either:
+    - pattern: |
+        spawn($CMD, $ARGS, ...)
+    - pattern: |
+        spawnSync($CMD, $ARGS, ...)
+  metadata:
+    cwe: "CWE-078"
+    references:
+      - "https://cwe.mitre.org/data/definitions/78.html"
+  metavariables:
+    CMD: $CMD
+- id: shelljs-exec-vuln
+  languages: [javascript]
+  message: "shelljs exec() method with unvalidated input"
+  severity: ERROR
+  pattern: |
+    require('shelljs').exec($CMD)
+  metadata:
+    cwe: "CWE-078"
+    references:
+      - "https://cwe.mitre.org/data/definitions/78.html"
