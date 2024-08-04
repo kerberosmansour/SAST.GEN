@@ -30,14 +30,14 @@ def save_output(language, cwe, content):
     """Saves the generated content to a markdown file."""
     date_str = datetime.now().strftime("%Y-%m-%d")
     output_file_name = f"{language}_{cwe}_semgrep_{date_str}.md"
-    output_path = os.path.join("SAST/Swift", output_file_name)
+    output_path = os.path.join("SecureDefaults/Java", output_file_name)
     
     with open(output_path, 'w') as file:
         file.write(content)
     print(f"Generated {output_file_name}")
 
 def main():
-    base_dir = "Swift"
+    base_dir = "VulnsContext/Java"
     context_file = "KnowledgeBase/Semgrep.output.md"
     
     # Iterate over all markdown files in the directory
@@ -52,10 +52,10 @@ def main():
             language = filename.split('_')[0]
             cwe = filename.split('_')[1]
             
-            # Step 2: Generate Semgrep SAST rule using the file summarizer assistant
+            # Step 2: Generate Secure Defaults using the file summarizer assistant
             semgrep_rule = generate_semgrep_rule(vulnerability_info, context_file)
             
-            # Step 3: Save the generated Semgrep rule to a new markdown file
+            # Step 3: Save the Secure Defaults to a new markdown file
             save_output(language, cwe, semgrep_rule)
 
 if __name__ == "__main__":
