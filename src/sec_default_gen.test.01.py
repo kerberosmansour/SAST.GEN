@@ -9,7 +9,7 @@ def read_vulnerability_info(file_path):
     return first_line
 
 def generate_semgrep_rule(vulnerability_info, context_file):
-    """Generates a Semgrep SAST rule using the file summarizer assistant."""
+    """Generates Secure Defaults using the file summarizer assistant."""
     file_summarizer = FileSummarizerAssistant()
     
     try:
@@ -30,14 +30,14 @@ def save_output(language, cwe, content):
     """Saves the generated content to a markdown file."""
     date_str = datetime.now().strftime("%Y-%m-%d")
     output_file_name = f"{language}_{cwe}_semgrep_{date_str}.md"
-    output_path = os.path.join("SecureDefaults/Java", output_file_name)
+    output_path = os.path.join("SecureDefaults/Csharp", output_file_name)
     
     with open(output_path, 'w') as file:
         file.write(content)
     print(f"Generated {output_file_name}")
 
 def main():
-    base_dir = "VulnsContext/Java"
+    base_dir = "VulnsContext/Csharp"
     context_file = "KnowledgeBase/Semgrep.output.md"
     
     # Iterate over all markdown files in the directory
