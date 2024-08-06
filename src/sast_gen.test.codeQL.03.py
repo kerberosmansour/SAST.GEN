@@ -56,14 +56,14 @@ def save_output(language, cwe, content):
     """Saves the generated content to a markdown file."""
     date_str = datetime.now().strftime("%Y-%m-%d")
     output_file_name = f"{language}_{cwe}_codeql_{date_str}.md"
-    output_path = os.path.join("SAST/CodeQL/Java", output_file_name)
+    output_path = os.path.join("SAST/CodeQL/Csharp", output_file_name)
     
     with open(output_path, 'w') as file:
         file.write(content)
     print(f"Generated {output_file_name}")
 
 def main():
-    base_dir = "VulnsContext/Java"
+    base_dir = "VulnsContext/Csharp"
     context_files = ["KnowledgeBase/CodeQL.md"]
     
     # Iterate over all markdown files in the directory
