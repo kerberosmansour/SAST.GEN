@@ -28,7 +28,7 @@ def generate_cwe_question(cwe_name, language):
 def main():
     file_summarizer = FileSummarizerAssistant()
     
-    languages = ["Go", "Ruby", "Rust", "PHP"]
+    languages = ["PHP"]
     cwes = {
         "CWE-917": "Improper Neutralization of Special Elements used in an Expression Language Statement ('Expression Language Injection')",
         "CWE-502": "Deserialization of Untrusted Data",
