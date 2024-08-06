@@ -34,7 +34,7 @@ def generate_mariana_trench_rule(vulnerability_info, context_files):
           ``` {vulnerability_info} ```
 
         3. **Mariana Trench Rule Creation:**
-           - Generate a set of Mariana Trench rules to detect this vulnerability in various scenarios.
+           - Generate a set of Mariana Trench rules to detect this vulnerability in as many various scenarios as possible documented in the vulnerability information provided.
            - Utilize Mariana Trench's capabilities to define rules that accurately identify the vulnerability, including:
                - **Taint flow tracking**: Identify how data tainted with user input or sensitive information flows through the code.
                - **Sink definitions**: Define key points in the code where the vulnerability might manifest, such as unsafe method calls or API interactions.
@@ -63,8 +63,8 @@ def generate_mariana_trench_rule(vulnerability_info, context_files):
 def save_output(language, cwe, content):
     """Saves the generated content to a markdown file."""
     date_str = datetime.now().strftime("%Y-%m-%d")
-    output_file_name = f"{language}_{cwe}_codeql_{date_str}.md"
-    output_path = os.path.join("SAST/MarianaTrench", output_file_name)
+    output_file_name = f"{language}_{cwe}_mariana_trench_{date_str}.md"
+    output_path = os.path.join("SAST/MarianaTrench/Java", output_file_name)
     
     with open(output_path, 'w') as file:
         file.write(content)
@@ -86,12 +86,12 @@ def main():
             language = filename.split('_')[0]
             cwe = filename.split('_')[1]
             
-            # Step 2: Generate CodeQL SAST rule using the file summarizer assistant
-            codeql_rule = generate_codeql_rule(vulnerability_info, context_files)
+            # Step 2: Generate Mariana Trench SAST rule using the file summarizer assistant
+            mariana_trench = generate_mariana_trench_rule(vulnerability_info, context_files)
             
-            # Step 3: Save the generated CodeQL rule to a new markdown file
-            if codeql_rule:
-                save_output(language, cwe, codeql_rule)
+            # Step 3: Save the generated Mariana Trench rule to a new markdown file
+            if mariana_trench:
+                save_output(language, cwe, mariana_trench)
 
 if __name__ == "__main__":
     main()
