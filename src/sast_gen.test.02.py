@@ -61,7 +61,7 @@ def save_output(language, cwe, content):
     """Saves the generated content to a markdown file."""
     date_str = datetime.now().strftime("%Y-%m-%d")
     output_file_name = f"{language}_{cwe}_semgrep_{date_str}.md"
-    output_path = os.path.join("SAST/Swift", output_file_name)
+    output_path = os.path.join("SAST/Semgrep/Swift", output_file_name)
     
     with open(output_path, 'w') as file:
         file.write(content)
