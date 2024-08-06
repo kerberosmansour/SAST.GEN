@@ -8,7 +8,7 @@ def read_vulnerability_info(file_path):
         first_line = file.readline().strip()
     return first_line
 
-def generate_codeql_rule(vulnerability_info, context_file):
+def generate_codeql_rule(vulnerability_info, context_files):
     """Generates a CodeQL SAST rule using the file summarizer assistant."""
     file_summarizer = FileSummarizerAssistant()
     
@@ -44,8 +44,9 @@ def generate_codeql_rule(vulnerability_info, context_file):
            - Suggest ways to test the CodeQL rules to ensure they perform effectively across different codebases and frameworks.
            - Provide guidance on how to use the CodeQL query console or GitHub Code Scanning to run these rules against large codebases for further validation.
         """
-        response = file_summarizer.ask(question)
-        return response
+        # Get the summary using the context files and the question
+        summary = file_summarizer.summarize_files(context_files, question)
+        return summary
 
     except Exception as e:
         print(f"An error occurred: {e}")
@@ -63,7 +64,7 @@ def save_output(language, cwe, content):
 
 def main():
     base_dir = "VulnsContext/Java"
-    context_file = "KnowledgeBase/CodeQL.md"
+    context_files = ["KnowledgeBase/CodeQL.md"]
     
     # Iterate over all markdown files in the directory
     for filename in os.listdir(base_dir):
@@ -78,10 +79,11 @@ def main():
             cwe = filename.split('_')[1]
             
             # Step 2: Generate CodeQL SAST rule using the file summarizer assistant
-            codeql_rule = generate_codeql_rule(vulnerability_info, context_file)
+            codeql_rule = generate_codeql_rule(vulnerability_info, context_files)
             
             # Step 3: Save the generated CodeQL rule to a new markdown file
-            save_output(language, cwe, codeql_rule)
+            if codeql_rule:
+                save_output(language, cwe, codeql_rule)
 
 if __name__ == "__main__":
     main()
